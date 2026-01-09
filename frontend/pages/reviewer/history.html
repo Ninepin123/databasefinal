@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>審核歷史紀錄 | ScholarshipHub</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&amp;family=Noto+Sans+TC:wght@300;400;500;700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#4F46E5",
+                        "primary-dark": "#4338ca",
+                        "background-light": "#F8FAFC",
+                        "background-dark": "#101622",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "Noto Sans TC", "sans-serif"],
+                        "body": ["Noto Sans TC", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer components {
+            .nav-link {
+                @apply text-slate-500 hover:text-primary transition-colors font-medium relative py-1;
+            }
+            .nav-link-active {
+                @apply text-primary font-bold relative py-1;
+            }
+            .nav-link-active::after {
+                content: '';
+                @apply absolute bottom-[-21px] left-0 w-full h-[3px] bg-primary rounded-t-full shadow-[0_-2px_6px_rgba(79,70,229,0.3)];
+            }
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-[#0f172a] dark:text-white font-display min-h-screen flex flex-col overflow-x-hidden transition-colors duration-300">
+
+    <!-- Top Navbar -->
+    <header
+        class="sticky top-0 z-50 w-full border-b border-gray-200 bg-white/80 backdrop-blur-md dark:bg-[#1a202c] dark:border-gray-700 shadow-sm">
+        <div class="mx-auto flex h-16 max-w-[1440px] items-center justify-between px-4 sm:px-6 lg:px-8">
+            <a href="../../index.html" class="flex items-center gap-4">
+                <div class="flex items-center justify-center size-9 rounded-xl bg-primary/10 text-primary shadow-sm">
+                    <span class="material-symbols-outlined">school</span>
+                </div>
+                <h1 class="text-xl font-bold">ScholarshipHub</h1>
+            </a>
+
+            <div class="hidden md:flex flex-1 justify-end items-center gap-8">
+                <nav class="flex gap-6">
+                    <a href="pending-applications.html" class="nav-link">待審核列表</a>
+                    <a href="history.html" class="nav-link-active">歷史紀錄</a>
+                    <a href="../announcement/list.html" class="nav-link">公告</a>
+                </nav>
+
+                <div class="flex items-center gap-3 pl-6 border-l border-gray-200 dark:border-gray-700">
+                    <div class="flex flex-col items-end">
+                        <span id="user-name-header" class="text-sm font-semibold">載入中...</span>
+                        <span id="user-role-header" class="text-xs text-slate-500">審核人員</span>
+                    </div>
+                    <div id="user-avatar"
+                        class="h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-400">
+                        <span class="material-symbols-outlined">person</span>
+                    </div>
+                    <button id="logout-btn-header" class="text-slate-400 hover:text-red-500">
+                        <span class="material-symbols-outlined">logout</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-1 w-full max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div class="flex flex-col gap-8">
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-2">
+                <div class="flex flex-col gap-2">
+                    <h1
+                        class="text-[#0f172a] dark:text-white text-3xl font-black tracking-tight flex items-center gap-3">
+                        審核歷史紀錄
+                        <span
+                            class="px-3 py-1 bg-gray-100 text-slate-600 text-xs font-bold rounded-full tracking-wider uppercase">HISTORY</span>
+                    </h1>
+                    <p class="text-slate-500 text-sm font-medium">查看過去已完成的審核</p>
+                </div>
+            </div>
+
+            <!-- History Table -->
+            <div
+                class="bg-white dark:bg-[#1a202c] rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full min-w-[900px]">
+                        <thead>
+                            <tr
+                                class="bg-slate-50/80 dark:bg-gray-800/50 border-b border-gray-200 dark:border-gray-700">
+                                <th
+                                    class="px-6 py-5 text-left text-xs font-extrabold text-slate-500 uppercase tracking-wider">
+                                    學生姓名</th>
+                                <th
+                                    class="px-6 py-5 text-left text-xs font-extrabold text-slate-500 uppercase tracking-wider">
+                                    獎學金名稱</th>
+                                <th
+                                    class="px-6 py-5 text-left text-xs font-extrabold text-slate-500 uppercase tracking-wider">
+                                    審核結果</th>
+                                <th
+                                    class="px-6 py-5 text-left text-xs font-extrabold text-slate-500 uppercase tracking-wider">
+                                    審核日期</th>
+                                <th
+                                    class="px-6 py-5 text-right text-xs font-extrabold text-slate-500 uppercase tracking-wider">
+                                    操作</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100 dark:divide-gray-700" id="history-body">
+                            <tr>
+                                <td colspan="5" class="px-6 py-10 text-center text-slate-500">載入中...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <div
+                    class="px-6 py-4 border-t border-gray-200 dark:border-gray-700 flex items-center justify-between bg-slate-50/50 dark:bg-gray-800/30">
+                    <span class="text-sm font-medium text-slate-500">顯示全部資料</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="w-full bg-white dark:bg-[#1a202c] border-t border-gray-200 dark:border-gray-700 py-8 mt-auto">
+        <div
+            class="px-6 lg:px-40 flex flex-col md:flex-row items-center justify-between gap-6 text-sm text-slate-500 font-medium">
+            <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary !text-[18px]">school</span>
+                <p>© 2026 Scholarship Hub. All rights reserved.</p>
+            </div>
+            <div class="flex gap-8">
+                <a class="hover:text-primary transition-colors" href="#">隱私權政策</a>
+                <a class="hover:text-primary transition-colors" href="#">服務條款</a>
+                <a class="hover:text-primary transition-colors" href="#">聯絡我們</a>
+            </div>
+        </div>
+    </footer>
+
+
+    <script src="../../js/config.js"></script>
+    <script>
+        const API_BASE = CONFIG.API_BASE;
+
+        // Check Auth
+        function checkAuth() {
+            const token = localStorage.getItem('authToken');
+            const user = localStorage.getItem('user');
+            if (!token || !user) {
+                alert('請先登入');
+                window.location.href = '../auth/login.html';
+                return null;
+            }
+
+            const userData = JSON.parse(user);
+            if (userData.role !== 'REVIEWER') {
+                alert('您沒有權限訪問此頁面');
+                window.location.href = '../../index.html';
+                return null;
+            }
+
+            return token;
+        }
+
+        // Load Header Info
+        function loadHeaderInfo() {
+            const userStr = localStorage.getItem('user');
+            if (userStr) {
+                const user = JSON.parse(userStr);
+                document.getElementById("user-name-header").textContent = user.name || "未知使用者";
+            }
+        }
+
+        // Logout
+        function logout() {
+            localStorage.clear();
+            window.location.href = '../auth/login.html';
+        }
+
+        // Fetch Review History
+        async function loadReviewHistory() {
+            const tbody = document.getElementById('history-body');
+            const token = checkAuth();
+            if (!token) return;
+
+            try {
+                const res = await fetch(`${API_BASE}/reviewer/reviews/history`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (!res.ok) {
+                    throw new Error('Failed to fetch history');
+                }
+
+                const records = await res.json();
+
+                if (records.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="5" class="px-6 py-10 text-center text-slate-500">目前沒有審核紀錄</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = records.map(record => {
+                    const application = record.application || {};
+                    const scholarship = application.scholarship || { name: '未知獎學金' };
+                    const student = application.student || {};
+                    const user = student.user || { name: '未知學生' };
+
+                    // Format Date
+                    let reviewDate = 'N/A';
+                    if (record.reviewDate) {
+                        reviewDate = new Date(record.reviewDate).toLocaleString('zh-TW');
+                    }
+
+                    // Result Styling
+                    let resultBadge = '';
+                    if (record.result === 'APPROVED') {
+                        resultBadge = '<span class="px-2.5 py-1 rounded-full bg-green-100 text-green-700 text-xs font-bold">通過</span>';
+                    } else if (record.result === 'REJECTED') {
+                        resultBadge = '<span class="px-2.5 py-1 rounded-full bg-red-100 text-red-700 text-xs font-bold">駁回</span>';
+                    } else {
+                        resultBadge = `<span class="px-2.5 py-1 rounded-full bg-gray-100 text-gray-700 text-xs font-bold">${record.result}</span>`;
+                    }
+
+                    return `
+                        <tr class="group hover:bg-slate-50/80 transition-colors">
+                            <td class="px-6 py-5">
+                                <div class="flex items-center gap-3">
+                                    <div class="size-10 rounded-full bg-gray-100 text-gray-500 flex items-center justify-center font-bold">
+                                        ${user.name ? user.name.charAt(0) : '?'}
+                                    </div>
+                                    <div>
+                                        <p class="text-[#0f172a] font-bold text-sm">${user.name}</p>
+                                        <p class="text-slate-500 text-xs mt-0.5">${student.department || ''}</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-5">
+                                <p class="text-[#0f172a] font-bold text-sm line-clamp-1">${scholarship.name}</p>
+                            </td>
+                            <td class="px-6 py-5">
+                                ${resultBadge}
+                            </td>
+                            <td class="px-6 py-5 text-sm text-slate-500 font-semibold">
+                                ${reviewDate}
+                            </td>
+                            <td class="px-6 py-5 text-right">
+                                <a href="application-detail.html?id=${application.applicationId}"
+                                    class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-gray-200 hover:bg-white text-slate-600 text-sm font-medium transition-all shadow-sm hover:shadow">
+                                    <span>查看</span>
+                                    <span class="material-symbols-outlined !text-[16px]">visibility</span>
+                                </a>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+
+            } catch (error) {
+                console.error(error);
+                tbody.innerHTML = '<tr><td colspan="5" class="px-6 py-5 text-center text-red-500">載入失敗，請重新整理頁面</td></tr>';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadHeaderInfo();
+            loadReviewHistory();
+
+            // Logout binding
+            document.getElementById('logout-btn-header').addEventListener('click', logout);
+        });
+    </script>
+</body>
+
+</html>

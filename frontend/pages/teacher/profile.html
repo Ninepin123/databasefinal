@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>教師個人資料 - ScholarshipHub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;700;900&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#4361EE",
+                        secondary: "#707EAE",
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-[#F4F7FE] text-[#1B2559] font-sans antialiased">
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <aside class="w-72 bg-white border-r border-gray-200 hidden lg:flex flex-col z-20">
+            <div class="p-8 flex items-center gap-3">
+                <div class="size-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                    <span class="material-symbols-outlined">school</span>
+                </div>
+                <a href="#" id="logo-link"
+                    class="font-bold text-xl tracking-tight hover:text-primary transition-colors">ScholarshipHub</a>
+            </div>
+            <nav class="flex-1 px-4 space-y-2">
+                <a href="students.html"
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-50 text-slate-500 font-medium transition-all">
+                    <span class="material-symbols-outlined">groups</span>
+                    學生管理
+                </a>
+                <a href="manage-recommendations.html"
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-50 text-slate-500 font-medium transition-all">
+                    <span class="material-symbols-outlined">history_edu</span>
+                    推薦信管理
+                </a>
+                <a href="profile.html"
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary/5 text-primary font-bold transition-all">
+                    <span class="material-symbols-outlined">person</span>
+                    個人資料
+                </a>
+            </nav>
+            <div class="p-4 border-t">
+                <button onclick="logout()"
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-red-50 text-slate-500 hover:text-red-500 transition-all w-full">
+                    <span class="material-symbols-outlined">logout</span>
+                    登出
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 flex flex-col h-full overflow-hidden bg-[#F4F7FE]">
+            <!-- Header -->
+            <header
+                class="bg-white/50 backdrop-blur-sm border-b border-white/50 sticky top-0 z-10 p-4 lg:p-8 flex justify-between items-center">
+                <div>
+                    <h2 class="text-2xl font-bold">個人資料</h2>
+                    <p class="text-secondary text-sm">管理您的帳戶資訊</p>
+                </div>
+            </header>
+
+            <!-- Content -->
+            <div class="flex-1 overflow-y-auto p-4 lg:p-8">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                    <!-- Profile Card -->
+                    <div class="lg:col-span-1">
+                        <div class="bg-white rounded-[20px] p-6 shadow-sm">
+                            <div class="flex flex-col items-center text-center">
+                                <div id="avatar"
+                                    class="size-24 rounded-full bg-gradient-to-br from-primary to-indigo-600 text-white flex items-center justify-center font-bold text-3xl shadow-lg shadow-primary/30 mb-4">
+                                    --
+                                </div>
+                                <h3 id="display-name" class="text-xl font-bold text-slate-800">載入中...</h3>
+                                <p id="display-email" class="text-secondary text-sm mt-1">--</p>
+                                <div
+                                    class="mt-3 inline-flex items-center px-4 py-1.5 rounded-full bg-emerald-50 text-emerald-600 text-xs font-bold">
+                                    <span class="material-symbols-outlined text-[16px] mr-1.5">badge</span>
+                                    教師
+                                </div>
+                            </div>
+
+                            <div class="mt-6 pt-6 border-t border-gray-100 space-y-4">
+                                <div class="flex items-center gap-3">
+                                    <div
+                                        class="size-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-500">
+                                        <span class="material-symbols-outlined text-[20px]">apartment</span>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-secondary">系所</p>
+                                        <p id="display-department" class="font-bold text-sm">--</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <div
+                                        class="size-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-500">
+                                        <span class="material-symbols-outlined text-[20px]">work</span>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-secondary">職稱</p>
+                                        <p id="display-title" class="font-bold text-sm">--</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <div
+                                        class="size-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-500">
+                                        <span class="material-symbols-outlined text-[20px]">location_on</span>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-secondary">辦公室</p>
+                                        <p id="display-office" class="font-bold text-sm">--</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Edit Form -->
+                    <div class="lg:col-span-2 space-y-6">
+                        <!-- Basic Info -->
+                        <div class="bg-white rounded-[20px] shadow-sm overflow-hidden">
+                            <div class="px-6 py-4 border-b border-gray-100 flex items-center gap-3 bg-slate-50/50">
+                                <span class="material-symbols-outlined text-primary">badge</span>
+                                <h3 class="font-bold text-slate-800">基本資料</h3>
+                            </div>
+                            <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-bold text-gray-700 mb-2">帳號 <span
+                                            class="text-xs text-gray-400">(唯讀)</span></label>
+                                    <input id="account" readonly
+                                        class="w-full rounded-xl border-gray-200 bg-gray-100 py-3 px-4 text-sm text-gray-500 cursor-not-allowed"
+                                        type="text" />
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-bold text-gray-700 mb-2">姓名</label>
+                                    <input id="name"
+                                        class="w-full rounded-xl border-gray-200 bg-white py-3 px-4 text-sm focus:border-primary focus:ring-primary"
+                                        type="text" />
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-bold text-gray-700 mb-2">電子郵件</label>
+                                    <input id="email"
+                                        class="w-full rounded-xl border-gray-200 bg-white py-3 px-4 text-sm focus:border-primary focus:ring-primary"
+                                        type="email" />
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-bold text-gray-700 mb-2">聯絡電話</label>
+                                    <input id="phone"
+                                        class="w-full rounded-xl border-gray-200 bg-white py-3 px-4 text-sm focus:border-primary focus:ring-primary"
+                                        type="tel" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Teacher Info -->
+                        <div class="bg-white rounded-[20px] shadow-sm overflow-hidden">
+                            <div class="px-6 py-4 border-b border-gray-100 flex items-center gap-3 bg-slate-50/50">
+                                <span class="material-symbols-outlined text-primary">school</span>
+                                <h3 class="font-bold text-slate-800">教師資訊</h3>
+                            </div>
+                            <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-bold text-gray-700 mb-2">系所</label>
+                                    <input id="department"
+                                        class="w-full rounded-xl border-gray-200 bg-white py-3 px-4 text-sm focus:border-primary focus:ring-primary"
+                                        type="text" />
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-bold text-gray-700 mb-2">職稱</label>
+                                    <select id="title"
+                                        class="w-full rounded-xl border-gray-200 bg-white py-3 px-4 text-sm focus:border-primary focus:ring-primary">
+                                        <option value="教授">教授</option>
+                                        <option value="副教授">副教授</option>
+                                        <option value="助理教授">助理教授</option>
+                                        <option value="講師">講師</option>
+                                    </select>
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label class="block text-sm font-bold text-gray-700 mb-2">辦公室位置</label>
+                                    <input id="office"
+                                        class="w-full rounded-xl border-gray-200 bg-white py-3 px-4 text-sm focus:border-primary focus:ring-primary"
+                                        type="text" placeholder="例：工程館 305 室" />
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label class="block text-sm font-bold text-gray-700 mb-2">地址</label>
+                                    <input id="address"
+                                        class="w-full rounded-xl border-gray-200 bg-white py-3 px-4 text-sm focus:border-primary focus:ring-primary"
+                                        type="text" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="flex flex-col sm:flex-row gap-4 justify-end">
+                            <button onclick="showPasswordModal()"
+                                class="px-6 py-3 rounded-xl border border-gray-200 text-gray-700 font-bold text-sm hover:bg-gray-50 transition">
+                                修改密碼
+                            </button>
+                            <button onclick="saveProfile()"
+                                class="px-8 py-3 rounded-xl bg-primary text-white font-bold text-sm hover:bg-blue-600 shadow-lg shadow-primary/30 transition flex items-center justify-center gap-2">
+                                <span class="material-symbols-outlined text-[18px]">save</span>
+                                儲存變更
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Password Modal -->
+    <div id="password-modal" class="fixed inset-0 z-50 hidden" role="dialog" aria-modal="true">
+        <div class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm" onclick="hidePasswordModal()"></div>
+        <div class="fixed inset-0 z-10 overflow-y-auto">
+            <div class="flex min-h-full items-center justify-center p-4">
+                <div class="relative bg-white rounded-2xl shadow-xl w-full max-w-md">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary">lock</span>
+                            修改密碼
+                        </h3>
+                        <div id="password-message" class="hidden mb-4 p-3 rounded-xl text-sm"></div>
+                        <form id="password-form" class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">目前密碼</label>
+                                <input type="password" id="old-password" required
+                                    class="w-full rounded-xl border-gray-200 py-3 px-4 text-sm focus:border-primary focus:ring-primary"
+                                    placeholder="請輸入目前密碼">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">新密碼</label>
+                                <input type="password" id="new-password" required minlength="6"
+                                    class="w-full rounded-xl border-gray-200 py-3 px-4 text-sm focus:border-primary focus:ring-primary"
+                                    placeholder="至少 6 個字元">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">確認新密碼</label>
+                                <input type="password" id="confirm-password" required minlength="6"
+                                    class="w-full rounded-xl border-gray-200 py-3 px-4 text-sm focus:border-primary focus:ring-primary"
+                                    placeholder="請再次輸入新密碼">
+                            </div>
+                            <div class="flex gap-3 pt-4">
+                                <button type="button" onclick="hidePasswordModal()"
+                                    class="flex-1 px-4 py-2.5 rounded-xl border border-gray-200 text-gray-700 font-bold text-sm hover:bg-gray-50">
+                                    取消
+                                </button>
+                                <button type="submit"
+                                    class="flex-1 px-4 py-2.5 rounded-xl bg-primary text-white font-bold text-sm hover:bg-blue-600">
+                                    確認修改
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="../../js/config.js"></script>
+    <script>
+        const API_BASE = CONFIG.API_BASE;
+        const token = localStorage.getItem('authToken');
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!token) {
+                window.location.href = '../auth/login.html';
+                return;
+            }
+
+            loadProfile();
+            document.getElementById('password-form').addEventListener('submit', changePassword);
+
+            // Logo click - navigate to role-specific home
+            document.getElementById('logo-link').addEventListener('click', (e) => {
+                e.preventDefault();
+                const userStr = localStorage.getItem('user');
+                if (userStr) {
+                    const user = JSON.parse(userStr);
+                    const role = user.role?.toUpperCase();
+                    if (role === 'STUDENT') {
+                        window.location.href = '../student/profile.html';
+                    } else if (role === 'ADMIN') {
+                        window.location.href = '../scholarship/list.html';
+                    } else if (role === 'REVIEWER') {
+                        window.location.href = '../reviewer/dashboard.html';
+                    } else if (role === 'TEACHER' || role === 'ADVISOR') {
+                        window.location.href = 'manage-recommendations.html';
+                    } else {
+                        window.location.href = '../../index.html';
+                    }
+                } else {
+                    window.location.href = '../../index.html';
+                }
+            });
+        });
+
+        function logout() {
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('user');
+            window.location.href = '../auth/login.html';
+        }
+
+        async function loadProfile() {
+            try {
+                const res = await fetch(`${API_BASE}/profile`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (!res.ok) {
+                    if (res.status === 401) {
+                        localStorage.clear();
+                        window.location.href = '../auth/login.html';
+                    }
+                    throw new Error("Failed to load profile");
+                }
+
+                const profile = await res.json();
+                console.log('Profile loaded:', profile);
+
+                // Display area
+                const name = profile.name || '未知';
+                document.getElementById('avatar').textContent = name.charAt(0).toUpperCase();
+                document.getElementById('display-name').textContent = name;
+                document.getElementById('display-email').textContent = profile.email || '--';
+                document.getElementById('display-department').textContent = profile.department || '未設定';
+                document.getElementById('display-title').textContent = profile.title || '未設定';
+                document.getElementById('display-office').textContent = profile.office || '未設定';
+
+                // Form fields
+                document.getElementById('account').value = profile.account || '';
+                document.getElementById('name').value = profile.name || '';
+                document.getElementById('email').value = profile.email || '';
+                document.getElementById('phone').value = profile.phone || '';
+                document.getElementById('department').value = profile.department || '';
+                document.getElementById('office').value = profile.office || '';
+                document.getElementById('address').value = profile.address || '';
+
+                // Title select
+                const titleSelect = document.getElementById('title');
+                if (profile.title) {
+                    for (let i = 0; i < titleSelect.options.length; i++) {
+                        if (titleSelect.options[i].value === profile.title) {
+                            titleSelect.selectedIndex = i;
+                            break;
+                        }
+                    }
+                }
+
+            } catch (e) {
+                console.error(e);
+                alert('載入個人資料失敗');
+            }
+        }
+
+        async function saveProfile() {
+            const data = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                department: document.getElementById('department').value,
+                title: document.getElementById('title').value,
+                office: document.getElementById('office').value,
+                address: document.getElementById('address').value
+            };
+
+            try {
+                const res = await fetch(`${API_BASE}/profile`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (res.ok) {
+                    alert('資料已成功更新！');
+                    loadProfile();
+                } else {
+                    const err = await res.json();
+                    alert('儲存失敗：' + (err.message || '未知錯誤'));
+                }
+            } catch (e) {
+                alert('無法連線到伺服器');
+            }
+        }
+
+        function showPasswordModal() {
+            document.getElementById('password-modal').classList.remove('hidden');
+            document.getElementById('password-form').reset();
+            document.getElementById('password-message').classList.add('hidden');
+        }
+
+        function hidePasswordModal() {
+            document.getElementById('password-modal').classList.add('hidden');
+        }
+
+        function showPasswordMessage(text, isError) {
+            const msg = document.getElementById('password-message');
+            msg.textContent = text;
+            msg.className = `mb-4 p-3 rounded-xl text-sm ${isError ? 'bg-red-50 text-red-600' : 'bg-green-50 text-green-600'}`;
+        }
+
+        async function changePassword(e) {
+            e.preventDefault();
+
+            const oldPassword = document.getElementById('old-password').value;
+            const newPassword = document.getElementById('new-password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+
+            if (newPassword !== confirmPassword) {
+                showPasswordMessage('新密碼與確認密碼不相符', true);
+                return;
+            }
+
+            try {
+                const res = await fetch(`${API_BASE}/profile/password`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ oldPassword, newPassword })
+                });
+
+                if (res.ok) {
+                    showPasswordMessage('密碼修改成功！', false);
+                    setTimeout(() => hidePasswordModal(), 1500);
+                } else {
+                    const err = await res.json();
+                    showPasswordMessage(err.message || '密碼修改失敗', true);
+                }
+            } catch (e) {
+                showPasswordMessage('無法連線到伺服器', true);
+            }
+        }
+    </script>
+</body>
+
+</html>

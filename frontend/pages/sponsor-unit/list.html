@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>獎助單位管理 | Scholarship Hub</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&amp;family=Noto+Sans+TC:wght@300;400;500;700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#4F46E5",
+                        "primary-dark": "#4338ca",
+                        "background-light": "#F8FAFC",
+                        "background-dark": "#101622",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "Noto Sans TC", "sans-serif"],
+                        "body": ["Noto Sans TC", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+</head>
+<style type="text/tailwindcss">
+    @layer components {
+        .nav-link {
+            @apply text-slate-500 hover:text-primary transition-colors font-medium relative py-1;
+        }
+        .nav-link:hover {
+            @apply text-primary;
+        }
+        .nav-link-active {
+            @apply text-primary font-bold relative py-1;
+        }
+        .nav-link-active::after {
+            content: '';
+            @apply absolute bottom-[-21px] left-0 w-full h-[3px] bg-primary rounded-t-full shadow-[0_-2px_6px_rgba(79,70,229,0.3)];
+        }
+    }
+</style>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-[#0f172a] dark:text-white font-display min-h-screen flex flex-col overflow-x-hidden transition-colors duration-300">
+
+    <header
+        class="sticky top-0 z-50 w-full border-b border-gray-200 bg-white/80 backdrop-blur-md dark:bg-[#1a202c] dark:border-gray-700 shadow-sm">
+        <div class="mx-auto flex h-16 max-w-[1440px] items-center justify-between px-4 sm:px-6 lg:px-8">
+            <a href="../scholarship/list.html" class="flex items-center gap-4">
+                <div class="flex items-center justify-center size-9 rounded-xl bg-primary/10 text-primary shadow-sm">
+                    <span class="material-symbols-outlined">school</span>
+                </div>
+                <h1 class="text-xl font-bold">ScholarshipHub</h1>
+            </a>
+
+            <div class="hidden md:flex flex-1 justify-end items-center gap-8">
+                <nav class="flex gap-6">
+                    <a href="../scholarship/list.html"
+                        class="text-sm font-medium text-slate-500 hover:text-primary transition-colors">獎學金管理</a>
+                    <a href="../announcement/manage.html"
+                        class="text-sm font-medium text-slate-500 hover:text-primary transition-colors">公告管理</a>
+                    <a href="list.html"
+                        class="text-sm font-medium text-[#0f172a] dark:text-white hover:text-primary transition-colors">獎助單位</a>
+                </nav>
+
+                <div class="flex items-center gap-3 pl-6 border-l border-gray-200 dark:border-gray-700">
+                    <div class="flex flex-col items-end">
+                        <span id="user-name" class="text-sm font-semibold">載入中...</span>
+                        <span id="user-role" class="text-xs text-slate-500">管理員</span>
+                    </div>
+                    <div id="user-avatar" class="h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center">
+                        <span class="material-symbols-outlined">person</span>
+                    </div>
+                    <button id="logout-btn" class="text-slate-400 hover:text-red-500">
+                        <span class="material-symbols-outlined">logout</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-1 w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+            <h2 class="text-4xl font-black">獎助單位管理</h2>
+            <a href="add.html"
+                class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary hover:bg-primary-dark text-white font-bold text-sm shadow-lg shadow-primary/30 transition-all active:scale-95">
+                <span class="material-symbols-outlined text-[20px]">add</span>
+                <span>新增獎助單位</span>
+            </a>
+        </div>
+
+        <div id="sponsor-unit-container" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            <div class="col-span-full text-center py-10">
+                <span class="material-symbols-outlined text-4xl text-slate-300 animate-spin">progress_activity</span>
+                <p class="text-slate-500 mt-2">載入中...</p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="border-t border-gray-200 dark:border-gray-700 py-6 text-center text-sm text-slate-400">
+        &copy; 2026 Scholarship Hub. All rights reserved.
+    </footer>
+
+
+    <script src="../../js/config.js"></script>
+    <script>
+        const API_BASE = CONFIG.API_BASE;
+
+        function checkAdmin() {
+            const token = localStorage.getItem('authToken');
+            const userStr = localStorage.getItem('user');
+
+            if (!token || !userStr) {
+                alert('請先登入');
+                window.location.href = '../auth/login.html';
+                return null;
+            }
+
+            try {
+                const user = JSON.parse(userStr);
+                if (user.role && user.role.toUpperCase() !== 'ADMIN') {
+                    alert('權限不足：僅管理員可存取此頁面');
+                    window.location.href = '../scholarship/list.html';
+                    return null;
+                }
+                return token;
+            } catch (e) {
+                console.error(e);
+                window.location.href = '../auth/login.html';
+                return null;
+            }
+        }
+
+        async function deleteSponsorUnit(id, name) {
+            if (!confirm(`確定要刪除獎助單位「${name}」嗎？\n\n此操作無法復原。`)) {
+                return;
+            }
+
+            const token = localStorage.getItem('authToken');
+            try {
+                const response = await fetch(`${API_BASE}/sponsor-units/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (response.ok) {
+                    alert('獎助單位已成功刪除！');
+                    location.reload();
+                } else {
+                    const errorText = await response.text();
+                    alert('刪除失敗: ' + errorText);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('發生錯誤，請稍後再試');
+            }
+        }
+
+        function createSponsorUnitCard(unit) {
+            const article = document.createElement('article');
+            article.className = 'group flex flex-col bg-white dark:bg-[#1a202c] rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300';
+
+            const gradients = [
+                'from-emerald-500 to-teal-400',
+                'from-blue-600 to-indigo-500',
+                'from-orange-400 to-rose-500',
+                'from-violet-500 to-purple-500',
+                'from-pink-500 to-rose-400'
+            ];
+            const gradientClass = gradients[unit.unitId % gradients.length] || gradients[0];
+
+            article.innerHTML = `
+                <div class="h-24 w-full bg-gradient-to-r ${gradientClass} relative">
+                    <div class="absolute top-4 left-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                        <button onclick="event.stopPropagation(); window.location.href='edit.html?id=${unit.unitId}'"
+                            class="p-2 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-lg shadow-sm hover:bg-blue-50 dark:hover:bg-blue-900/50 text-blue-600 transition-colors" title="編輯">
+                            <span class="material-symbols-outlined text-[18px]">edit</span>
+                        </button>
+                        <button onclick="event.stopPropagation(); deleteSponsorUnit(${unit.unitId}, '${unit.unitName.replace(/'/g, "\\'")}')"
+                            class="p-2 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-lg shadow-sm hover:bg-red-50 dark:hover:bg-red-900/50 text-red-600 transition-colors" title="刪除">
+                            <span class="material-symbols-outlined text-[18px]">delete</span>
+                        </button>
+                    </div>
+                    <div class="absolute -bottom-6 left-6 h-12 w-12 rounded-xl bg-white p-1 shadow-md border border-gray-50">
+                        <div class="h-full w-full bg-emerald-50 rounded-lg flex items-center justify-center text-emerald-500">
+                            <span class="material-symbols-outlined">business</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="pt-8 pb-6 px-6 flex flex-col flex-1">
+                    <h3 class="text-xl font-bold text-[#0f172a] dark:text-white mb-3 group-hover:text-primary transition-colors">${unit.unitName}</h3>
+                    <div class="space-y-2 text-sm text-slate-500">
+                        ${unit.contactPerson ? `
+                        <div class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-[18px]">person</span>
+                            <span>${unit.contactPerson}</span>
+                        </div>
+                        ` : ''}
+                        ${unit.phone ? `
+                        <div class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-[18px]">phone</span>
+                            <span>${unit.phone}</span>
+                        </div>
+                        ` : ''}
+                        ${unit.email ? `
+                        <div class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-[18px]">mail</span>
+                            <span>${unit.email}</span>
+                        </div>
+                        ` : ''}
+                        ${unit.address ? `
+                        <div class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-[18px]">location_on</span>
+                            <span class="line-clamp-1">${unit.address}</span>
+                        </div>
+                        ` : ''}
+                        ${unit.website ? `
+                        <div class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-[18px]">language</span>
+                            <a href="${unit.website}" target="_blank" class="text-primary hover:underline line-clamp-1">${unit.website}</a>
+                        </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+
+            return article;
+        }
+
+        async function loadSponsorUnits() {
+            const container = document.getElementById('sponsor-unit-container');
+            const token = localStorage.getItem('authToken');
+            try {
+                const response = await fetch(`${API_BASE}/sponsor-units`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const units = await response.json();
+
+                container.innerHTML = '';
+
+                if (units.length === 0) {
+                    container.innerHTML = '<div class="col-span-full text-center py-10"><p class="text-slate-500 text-lg">目前沒有任何獎助單位資料。</p></div>';
+                    return;
+                }
+
+                units.forEach(unit => {
+                    const card = createSponsorUnitCard(unit);
+                    container.appendChild(card);
+                });
+            } catch (error) {
+                console.error('Error fetching sponsor units:', error);
+                container.innerHTML = '<p class="text-red-500 col-span-full text-center">無法載入獎助單位資料，請稍後再試。</p>';
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            const token = checkAdmin();
+            if (!token) return;
+
+            document.getElementById("logout-btn").onclick = () => {
+                localStorage.clear();
+                location.href = "../auth/login.html";
+            };
+
+            // Load user info
+            try {
+                const profileRes = await fetch(`${API_BASE}/profile`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+
+                if (profileRes.ok) {
+                    const profile = await profileRes.json();
+                    document.getElementById("user-name").textContent = profile.name || "未知使用者";
+                    const roleMap = { STUDENT: "學生", TEACHER: "導師", ADMIN: "管理員" };
+                    document.getElementById("user-role").textContent = roleMap[profile.role] || profile.role || "一般使用者";
+                } else {
+                    const userStr = localStorage.getItem('user');
+                    if (userStr) {
+                        const user = JSON.parse(userStr);
+                        document.getElementById("user-name").textContent = user.name;
+                        const roleMap = { STUDENT: "學生", TEACHER: "導師", ADMIN: "管理員" };
+                        document.getElementById("user-role").textContent = roleMap[user.role] || user.role;
+                    }
+                }
+            } catch (e) {
+                console.error("Failed to load profile:", e);
+                document.getElementById("user-name").textContent = "連線失敗";
+            }
+
+            // Load sponsor units
+            loadSponsorUnits();
+        });
+    </script>
+</body>
+
+</html>

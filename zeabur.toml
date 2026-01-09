@@ -1,0 +1,11 @@
+# Zeabur Deployment Configuration
+
+[[services]]
+name = "backend"
+dir = "backend"
+# Zeabur will automatically detect the Maven project
+
+[[services]]
+name = "frontend"
+dir = "frontend"
+# Zeabur will automatically serve the static site

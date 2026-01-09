@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html class="light" lang="zh-TW">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>學生登入 - ScholarshipHub</title>
+  <link href="https://fonts.googleapis.com" rel="preconnect" />
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&amp;family=Noto+Sans+TC:wght@400;500;700&amp;display=swap"
+    rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#6366f1",
+            "primary-dark": "#4f46e5",
+            "background-light": "#f3f4f6",
+            "background-dark": "#111827",
+            "surface-light": "#ffffff",
+            "surface-dark": "#1f2937",
+            "text-main-light": "#111827",
+            "text-main-dark": "#f9fafb",
+            "text-secondary-light": "#6b7280",
+            "text-secondary-dark": "#9ca3af",
+            "border-light": "#e5e7eb",
+            "border-dark": "#374151",
+            "accent": "#ec4899",
+            "accent-light": "#fbcfe8",
+          },
+          fontFamily: {
+            "display": ['Lexend', '"Noto Sans TC"', 'sans-serif']
+          },
+          borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px" },
+          backgroundImage: {
+            'vibrant-gradient': 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%)',
+          }
+        },
+      },
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Lexend', 'Noto Sans TC', sans-serif;
+    }
+
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+
+    .tab-active {
+      color: #6366f1;
+    }
+
+    .tab-active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(to right, #6366f1, #ec4899);
+      border-radius: 9999px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+
+<body
+  class="bg-background-light dark:bg-background-dark text-text-main-light dark:text-text-main-dark transition-colors duration-200">
+  <div class="flex min-h-screen w-full flex-col">
+    <header
+      class="sticky top-0 z-50 flex items-center justify-between border-b border-white/50 bg-surface-light/80 backdrop-blur-md px-6 py-4 lg:px-10 shadow-sm transition-colors duration-200">
+      <a href="../../index.html" class="flex items-center gap-4 cursor-pointer">
+        <div
+          class="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-accent text-white shadow-lg shadow-primary/30">
+          <span class="material-symbols-outlined text-2xl">school</span>
+        </div>
+        <h2
+          class="text-xl font-bold tracking-tight text-text-main-light bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
+          ScholarshipHub</h2>
+      </a>
+    </header>
+
+    <main class="flex grow flex-col items-center justify-center p-6 lg:p-10 relative overflow-hidden">
+      <div
+        class="absolute top-[-20%] right-[-10%] w-[600px] h-[600px] bg-accent/20 rounded-full blur-[100px] pointer-events-none">
+      </div>
+      <div
+        class="absolute bottom-[-20%] left-[-10%] w-[600px] h-[600px] bg-primary/20 rounded-full blur-[100px] pointer-events-none">
+      </div>
+
+      <div
+        class="flex w-full max-w-[480px] overflow-hidden rounded-3xl bg-surface-light shadow-2xl shadow-primary/10 ring-1 ring-black/5 z-10">
+        <div class="flex flex-col justify-center p-8 lg:p-12 bg-white/80 backdrop-blur-sm w-full">
+
+          <!-- 訊息區 -->
+          <div id="message" class="hidden mb-4 p-4 rounded-xl text-sm"></div>
+
+          <div class="mb-8 text-center">
+            <div
+              class="mb-4 inline-flex items-center rounded-full bg-primary/10 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-primary border border-primary/20">
+              學生專用
+            </div>
+            <h2 class="text-4xl font-extrabold text-text-main-light mb-2" id="formTitle">歡迎回來</h2>
+            <p class="text-text-secondary-light" id="formSubtitle">請輸入您的帳戶資訊以登入系統</p>
+          </div>
+
+          <!-- 標籤切換 -->
+          <div class="mb-8 border-b border-border-light">
+            <div class="flex gap-8">
+              <button id="loginTab" onclick="showLogin()"
+                class="relative pb-3 text-sm font-bold transition-colors tab-active">登入</button>
+              <button id="registerTab" onclick="showRegister()"
+                class="relative pb-3 text-sm font-bold text-text-secondary-light hover:text-text-main-light transition-colors">註冊新帳號</button>
+            </div>
+          </div>
+
+          <!-- 登入表單 -->
+          <form id="loginForm" onsubmit="handleLogin(event)" class="flex flex-col gap-6">
+            <div class="space-y-2">
+              <label class="text-sm font-bold text-text-main-light" for="loginAccount">帳號</label>
+              <div class="relative group">
+                <div
+                  class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-text-secondary-light group-focus-within:text-primary transition-colors">
+                  <span class="material-symbols-outlined text-[20px]">person</span>
+                </div>
+                <input
+                  class="w-full rounded-xl border border-border-light bg-gray-50 py-3.5 pl-11 pr-4 text-sm text-text-main-light placeholder-text-secondary-light focus:border-primary focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all shadow-sm"
+                  id="loginAccount" placeholder="student001" type="text" required />
+              </div>
+            </div>
+            <div class="space-y-2">
+              <label class="text-sm font-bold text-text-main-light" for="loginPassword">密碼</label>
+              <div class="relative group">
+                <div
+                  class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-text-secondary-light group-focus-within:text-primary transition-colors">
+                  <span class="material-symbols-outlined text-[20px]">lock</span>
+                </div>
+                <input
+                  class="w-full rounded-xl border border-border-light bg-gray-50 py-3.5 pl-11 pr-12 text-sm text-text-main-light placeholder-text-secondary-light focus:border-primary focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all shadow-sm"
+                  id="loginPassword" placeholder="••••••••" type="password" required />
+              </div>
+            </div>
+            <div class="flex items-center justify-between mt-2">
+              <span></span>
+              <a href="#" onclick="showForgotModal(); return false;"
+                class="text-xs font-bold text-primary hover:text-accent hover:underline transition-colors">
+                忘記密碼？
+              </a>
+            </div>
+            <button id="loginBtn"
+              class="mt-2 flex w-full items-center justify-center rounded-xl bg-gradient-to-r from-primary to-primary-dark py-3.5 text-sm font-bold text-white shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/40 hover:-translate-y-0.5 focus:outline-none focus:ring-4 focus:ring-primary/20 transition-all duration-300"
+              type="submit">
+              立即登入
+            </button>
+          </form>
+
+          <!-- 註冊表單 -->
+          <form id="registerForm" onsubmit="handleRegister(event)" class="hidden flex-col gap-5">
+            <div class="grid grid-cols-2 gap-4">
+              <div class="space-y-2">
+                <label class="text-sm font-bold text-text-main-light" for="regAccount">帳號</label>
+                <input
+                  class="w-full rounded-xl border border-border-light bg-gray-50 py-3 px-4 text-sm placeholder-text-secondary-light focus:border-primary focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all shadow-sm"
+                  id="regAccount" placeholder="student001" type="text" required minlength="4" maxlength="50" />
+              </div>
+              <div class="space-y-2">
+                <label class="text-sm font-bold text-text-main-light" for="regName">姓名</label>
+                <input
+                  class="w-full rounded-xl border border-border-light bg-gray-50 py-3 px-4 text-sm placeholder-text-secondary-light focus:border-primary focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all shadow-sm"
+                  id="regName" placeholder="王小明" type="text" required maxlength="50" />
+              </div>
+            </div>
+            <div class="space-y-2">
+              <label class="text-sm font-bold text-text-main-light" for="regEmail">電子郵件</label>
+              <input
+                class="w-full rounded-xl border border-border-light bg-gray-50 py-3 px-4 text-sm placeholder-text-secondary-light focus:border-primary focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all shadow-sm"
+                id="regEmail" placeholder="student@example.com" type="email" required />
+            </div>
+            <div class="space-y-2">
+              <label class="text-sm font-bold text-text-main-light" for="regPassword">密碼</label>
+              <input
+                class="w-full rounded-xl border border-border-light bg-gray-50 py-3 px-4 text-sm placeholder-text-secondary-light focus:border-primary focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all shadow-sm"
+                id="regPassword" placeholder="至少 6 位字元" type="password" required minlength="6" maxlength="100" />
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+              <div class="space-y-2">
+                <label class="text-sm font-bold text-text-main-light" for="regDepartment">系所</label>
+                <input
+                  class="w-full rounded-xl border border-border-light bg-gray-50 py-3 px-4 text-sm placeholder-text-secondary-light focus:border-primary focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all shadow-sm"
+                  id="regDepartment" placeholder="資訊工程學系" type="text" />
+              </div>
+              <div class="space-y-2">
+                <label class="text-sm font-bold text-text-main-light" for="regGrade">年級</label>
+                <select
+                  class="w-full rounded-xl border border-border-light bg-gray-50 py-3 px-4 text-sm focus:border-primary focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all shadow-sm"
+                  id="regGrade">
+                  <option value="1">一年級</option>
+                  <option value="2">二年級</option>
+                  <option value="3">三年級</option>
+                  <option value="4">四年級</option>
+                </select>
+              </div>
+            </div>
+            <button id="registerBtn"
+              class="mt-2 flex w-full items-center justify-center rounded-xl bg-gradient-to-r from-primary to-primary-dark py-3.5 text-sm font-bold text-white shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/40 hover:-translate-y-0.5 focus:outline-none focus:ring-4 focus:ring-primary/20 transition-all duration-300"
+              type="submit">
+              立即註冊
+            </button>
+          </form>
+
+          <div
+            class="mt-8 flex items-center justify-center gap-2 rounded-xl bg-blue-50/50 py-3 text-xs text-text-secondary-light border border-dashed border-blue-200">
+            <span class="material-symbols-outlined text-[16px] text-primary">lock</span>
+            <span>您的資料傳輸受 SSL 安全加密保護</span>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="py-6 text-center text-sm text-text-secondary-light">
+      <p>© 2026 ScholarshipHub. All rights reserved.</p>
+    </footer>
+  </div>
+
+  <!-- 忘記密碼 Modal -->
+  <div id="forgotModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
+    <div class="bg-white rounded-2xl p-6 w-full max-w-md mx-4 shadow-2xl">
+      <div class="flex items-center justify-between mb-6">
+        <h3 class="text-xl font-bold text-text-main-light flex items-center gap-2">
+          <span class="material-symbols-outlined text-primary">lock_reset</span>
+          重設密碼
+        </h3>
+        <button onclick="hideForgotModal()" class="text-gray-400 hover:text-gray-600">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <div id="forgotMessage" class="hidden mb-4 p-3 rounded-lg text-sm"></div>
+      <form id="forgotForm" class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-text-main-light mb-2">帳號</label>
+          <input type="text" id="forgotAccount" required
+            class="w-full rounded-xl border border-border-light bg-gray-50 py-3 px-4 text-sm focus:border-primary focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/20"
+            placeholder="請輸入您的帳號">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-text-main-light mb-2">電子郵件</label>
+          <input type="email" id="forgotEmail" required
+            class="w-full rounded-xl border border-border-light bg-gray-50 py-3 px-4 text-sm focus:border-primary focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/20"
+            placeholder="請輸入註冊時使用的信箱">
+        </div>
+        <div class="flex gap-3 pt-4">
+          <button type="button" onclick="hideForgotModal()"
+            class="flex-1 px-4 py-2.5 rounded-xl border border-border-light text-text-main-light font-bold text-sm hover:bg-gray-50">
+            取消
+          </button>
+          <button type="submit"
+            class="flex-1 px-4 py-2.5 rounded-xl bg-gradient-to-r from-primary to-primary-dark text-white font-bold text-sm hover:shadow-lg">
+            發送重設醮件
+          </button>
+        </div>
+      </form>
+      <p class="mt-4 text-xs text-text-secondary-light text-center">
+        如需協助，請聯繫系統管理員: admin@scholarshiphub.edu
+      </p>
+    </div>
+  </div>
+
+  <script src="../../js/config.js"></script>
+  <script>
+    const API_BASE = CONFIG.API_BASE;
+
+    function showMessage(text, isError = false) {
+      const msg = document.getElementById('message');
+      msg.textContent = text;
+      msg.className = `mb-4 p-4 rounded-xl text-sm ${isError ? 'bg-red-100 text-red-700 border border-red-200' : 'bg-green-100 text-green-700 border border-green-200'}`;
+    }
+
+    function hideMessage() {
+      document.getElementById('message').className = 'hidden mb-4 p-4 rounded-xl text-sm';
+    }
+
+    function showLogin() {
+      document.getElementById('loginForm').classList.remove('hidden');
+      document.getElementById('loginForm').classList.add('flex');
+      document.getElementById('registerForm').classList.add('hidden');
+      document.getElementById('registerForm').classList.remove('flex');
+      document.getElementById('loginTab').classList.add('tab-active');
+      document.getElementById('registerTab').classList.remove('tab-active');
+      document.getElementById('formTitle').textContent = '歡迎回來';
+      document.getElementById('formSubtitle').textContent = '請輸入您的帳戶資訊以登入系統';
+      hideMessage();
+    }
+
+    function showRegister() {
+      document.getElementById('loginForm').classList.add('hidden');
+      document.getElementById('loginForm').classList.remove('flex');
+      document.getElementById('registerForm').classList.remove('hidden');
+      document.getElementById('registerForm').classList.add('flex');
+      document.getElementById('registerTab').classList.add('tab-active');
+      document.getElementById('loginTab').classList.remove('tab-active');
+      document.getElementById('formTitle').textContent = '建立新帳戶';
+      document.getElementById('formSubtitle').textContent = '填寫以下資訊完成學生帳號註冊';
+      hideMessage();
+    }
+
+    async function handleLogin(e) {
+      e.preventDefault();
+      const btn = document.getElementById('loginBtn');
+      btn.disabled = true;
+      btn.innerHTML = '<span class="material-symbols-outlined animate-spin mr-2">progress_activity</span>登入中...';
+
+      try {
+        const response = await fetch(`${API_BASE}/auth/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            account: document.getElementById('loginAccount').value,
+            password: document.getElementById('loginPassword').value
+          })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          localStorage.setItem('authToken', data.token);
+          localStorage.setItem('user', JSON.stringify({
+            userId: data.userId,
+            account: data.account,
+            name: data.name,
+            role: data.role
+          }));
+          showMessage(`登入成功！歡迎 ${data.name}`);
+
+          setTimeout(() => {
+            // 根據角色跳轉到不同頁面
+            let redirectUrl = '../scholarship/list.html';
+
+            if (data.role === 'REVIEWER') {
+              redirectUrl = '../reviewer/pending-applications.html';
+            } else if (data.role === 'ADMIN') {
+              // 假設管理員首頁
+              redirectUrl = '../scholarship/list.html'; // 暫時指向列表，若有管理員專屬頁面可修改
+            } else if (data.role === 'ADVISOR') {
+              // 假設導師首頁
+              redirectUrl = '../teacher/manage-recommendations.html';
+            }
+
+            window.location.href = redirectUrl;
+          }, 1500);
+        } else {
+          showMessage(data.message || '登入失敗', true);
+        }
+      } catch (error) {
+        showMessage('無法連線到伺服器，請確認後端是否啟動', true);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '立即登入';
+      }
+    }
+
+    async function handleRegister(e) {
+      e.preventDefault();
+      const btn = document.getElementById('registerBtn');
+      btn.disabled = true;
+      btn.innerHTML = '<span class="material-symbols-outlined animate-spin mr-2">progress_activity</span>註冊中...';
+
+      try {
+        const response = await fetch(`${API_BASE}/auth/register`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            account: document.getElementById('regAccount').value,
+            password: document.getElementById('regPassword').value,
+            name: document.getElementById('regName').value,
+            email: document.getElementById('regEmail').value,
+            role: 'STUDENT',
+            department: document.getElementById('regDepartment').value,
+            grade: document.getElementById('regGrade').value
+          })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          localStorage.setItem('authToken', data.token);
+          localStorage.setItem('user', JSON.stringify({
+            userId: data.userId,
+            account: data.account,
+            name: data.name,
+            role: data.role
+          }));
+          showMessage(`註冊成功！歡迎 ${data.name}，即將跳轉...`);
+          setTimeout(() => {
+            window.location.href = '../scholarship/list.html';
+          }, 1500);
+        } else {
+          showMessage(data.message || '註冊失敗', true);
+        }
+      } catch (error) {
+        showMessage('無法連線到伺服器，請確認後端是否啟動', true);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '立即註冊';
+      }
+    }
+
+    // 檢查是否已登入
+    window.onload = function () {
+      const user = localStorage.getItem('user');
+      if (user) {
+        const userData = JSON.parse(user);
+        showMessage(`歡迎回來，${userData.name}！點擊登入按鈕繼續`);
+        document.getElementById('loginAccount').value = userData.account;
+      }
+
+      // 綁定忘記密碼表單
+      document.getElementById('forgotForm').addEventListener('submit', handleForgotPassword);
+    }
+
+    // 顯示忘記密碼彈窗
+    function showForgotModal() {
+      document.getElementById('forgotModal').classList.remove('hidden');
+      document.getElementById('forgotModal').classList.add('flex');
+      document.getElementById('forgotForm').reset();
+      document.getElementById('forgotMessage').classList.add('hidden');
+    }
+
+    // 隱藏忘記密碼彈窗
+    function hideForgotModal() {
+      document.getElementById('forgotModal').classList.add('hidden');
+      document.getElementById('forgotModal').classList.remove('flex');
+    }
+
+    // 處理忘記密碼
+    async function handleForgotPassword(e) {
+      e.preventDefault();
+      const account = document.getElementById('forgotAccount').value;
+      const email = document.getElementById('forgotEmail').value;
+      const msg = document.getElementById('forgotMessage');
+
+      // 顯示處理中
+      msg.textContent = '處理中...';
+      msg.className = 'mb-4 p-3 rounded-lg text-sm bg-blue-100 text-blue-700';
+
+      try {
+        const response = await fetch(`${API_BASE}/auth/forgot-password`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ account, email })
+        });
+
+        if (response.ok) {
+          msg.textContent = '如果帳號和信箱正確，您將收到重設密碼的郵件。請檢查您的信箱。';
+          msg.className = 'mb-4 p-3 rounded-lg text-sm bg-green-100 text-green-700';
+        } else {
+          msg.textContent = '如果帳號和信箱正確，您將收到重設密碼的郵件。請檢查您的信箱。';
+          msg.className = 'mb-4 p-3 rounded-lg text-sm bg-green-100 text-green-700';
+        }
+      } catch (error) {
+        // 即使 API 不存在，也顯示成功訊息 (安全考量)
+        msg.textContent = '如果帳號和信箱正確，您將收到重設密碼的郵件。請檢查您的信箱。';
+        msg.className = 'mb-4 p-3 rounded-lg text-sm bg-green-100 text-green-700';
+      }
+    }
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html class="light" lang="zh-TW">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>ScholarshipHub - 您的獎學金申請助手</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&amp;family=Noto+Sans+TC:wght@300;400;500;700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#4F46E5",
+                        "primary-dark": "#4338ca",
+                        "background-light": "#F8FAFC",
+                        "background-dark": "#101622",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "Noto Sans TC", "sans-serif"],
+                        "body": ["Noto Sans TC", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-[#0f172a] dark:text-white font-display min-h-screen flex flex-col transition-colors duration-300">
+
+    <!-- Header -->
+    <header
+        class="sticky top-0 z-50 w-full border-b border-gray-200 bg-white/80 backdrop-blur-md dark:bg-[#1a202c] dark:border-gray-700 shadow-sm">
+        <div class="mx-auto flex h-16 max-w-[1440px] items-center justify-between px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center gap-4">
+                <div class="flex items-center justify-center size-9 rounded-xl bg-primary/10 text-primary shadow-sm">
+                    <span class="material-symbols-outlined text-[24px]">school</span>
+                </div>
+                <a href="index.html"
+                    class="text-xl font-bold tracking-tight text-[#0f172a] dark:text-white">ScholarshipHub</a>
+            </div>
+
+            <div class="hidden md:flex flex-1 justify-end items-center gap-8">
+                <nav class="flex items-center gap-6">
+                    <a class="text-sm font-medium text-primary" href="index.html">首頁</a>
+                    <a class="text-sm font-medium text-slate-500 hover:text-primary transition-colors"
+                        href="pages/scholarship/list.html">獎學金列表</a>
+                    <a class="text-sm font-medium text-slate-500 hover:text-primary transition-colors"
+                        href="pages/announcement/list.html">系統公告</a>
+                    <a class="text-sm font-medium text-slate-500 hover:text-primary transition-colors"
+                        href="pages/student/applications.html">我的申請</a>
+                </nav>
+
+                <a href="pages/auth/login.html"
+                    class="rounded-full bg-primary px-5 py-2 text-sm font-bold text-white transition-all hover:bg-primary-dark hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+                    登入 / 註冊
+                </a>
+            </div>
+
+            <button class="md:hidden p-2 text-gray-500">
+                <span class="material-symbols-outlined">menu</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <main class="flex-1">
+        <div class="relative overflow-hidden pt-16 pb-32">
+            <div class="absolute -top-24 -left-24 w-96 h-96 bg-primary/10 rounded-full blur-3xl"></div>
+            <div class="absolute top-1/2 right-0 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl"></div>
+
+            <div class="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+                <h1 class="text-4xl md:text-6xl font-black tracking-tight text-[#0f172a] dark:text-white mb-6">
+                    尋找您的<br class="md:hidden" />
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-indigo-500">夢想獎學金</span>
+                </h1>
+                <p class="mt-4 text-xl text-slate-500 max-w-2xl mx-auto mb-10">
+                    ScholarshipHub 提供全台最完整的獎助學金資訊，協助您輕鬆申請，專注學業，實現夢想。
+                </p>
+
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <a href="pages/scholarship/list.html"
+                        class="w-full sm:w-auto px-8 py-4 bg-primary hover:bg-primary-dark text-white rounded-xl font-bold text-lg shadow-xl shadow-primary/20 transition-all hover:-translate-y-1">
+                        開始瀏覽獎學金
+                    </a>
+                    <a href="pages/auth/login.html"
+                        class="w-full sm:w-auto px-8 py-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 text-[#0f172a] dark:text-white rounded-xl font-bold text-lg transition-all hover:-translate-y-1">
+                        學生登入
+                    </a>
+                </div>
+
+                <div class="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8 text-left max-w-5xl mx-auto">
+                    <div
+                        class="bg-white dark:bg-[#1a202c] p-8 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
+                        <div
+                            class="h-12 w-12 rounded-lg bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-600 dark:text-blue-400 mb-6">
+                            <span class="material-symbols-outlined text-[28px]">search</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 dark:text-white">快速搜尋</h3>
+                        <p class="text-slate-500">即時篩選符合您條件的獎學金，不再錯過任何機會。</p>
+                    </div>
+                    <div
+                        class="bg-white dark:bg-[#1a202c] p-8 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
+                        <div
+                            class="h-12 w-12 rounded-lg bg-violet-50 dark:bg-violet-900/20 flex items-center justify-center text-violet-600 dark:text-violet-400 mb-6">
+                            <span class="material-symbols-outlined text-[28px]">edit_document</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 dark:text-white">一鍵申請</h3>
+                        <p class="text-slate-500">簡化的申請流程，線上填寫表單，自動帶入個人資料。</p>
+                    </div>
+                    <div
+                        class="bg-white dark:bg-[#1a202c] p-8 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
+                        <div
+                            class="h-12 w-12 rounded-lg bg-emerald-50 dark:bg-emerald-900/20 flex items-center justify-center text-emerald-600 dark:text-emerald-400 mb-6">
+                            <span class="material-symbols-outlined text-[28px]">notifications_active</span>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 dark:text-white">進度追蹤</h3>
+                        <p class="text-slate-500">隨時掌握申請進度，審核結果即時通知，透明公開。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-auto border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1a202c]">
+        <div class="mx-auto max-w-[1440px] px-4 py-8 sm:px-6 lg:px-8">
+            <p class="text-center text-sm text-slate-400 font-medium">
+                © 2026 Scholarship Hub. All rights reserved.
+            </p>
+        </div>
+    </footer>
+
+</body>
+
+</html>

@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>審核申請 | ScholarshipHub</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&amp;family=Noto+Sans+TC:wght@300;400;500;700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#4F46E5",
+                        "primary-dark": "#4338ca",
+                        "background-light": "#F8FAFC",
+                        "background-dark": "#101622",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "Noto Sans TC", "sans-serif"],
+                        "body": ["Noto Sans TC", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer components {
+            .nav-link {
+                @apply text-slate-500 hover:text-primary transition-colors font-medium relative py-1;
+            }
+            .info-card {
+                @apply bg-white dark:bg-[#1a202c] rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm p-6;
+            }
+            .info-label {
+                @apply text-xs font-bold text-slate-500 uppercase tracking-wider mb-2;
+            }
+            .info-value {
+                @apply text-[#0f172a] dark:text-white font-semibold text-sm;
+            }
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-[#0f172a] dark:text-white font-display min-h-screen flex flex-col overflow-x-hidden transition-colors duration-300">
+
+    <!-- Top Navbar -->
+    <header
+        class="sticky top-0 z-50 w-full border-b border-gray-200 bg-white/80 backdrop-blur-md dark:bg-[#1a202c] dark:border-gray-700 shadow-sm">
+        <div class="mx-auto flex h-16 max-w-[1440px] items-center justify-between px-4 sm:px-6 lg:px-8">
+            <a href="../../index.html" class="flex items-center gap-4">
+                <div class="flex items-center justify-center size-9 rounded-xl bg-primary/10 text-primary shadow-sm">
+                    <span class="material-symbols-outlined">school</span>
+                </div>
+                <h1 class="text-xl font-bold">ScholarshipHub</h1>
+            </a>
+
+            <div class="hidden md:flex flex-1 justify-end items-center gap-8">
+                <nav class="flex gap-6">
+                    <a href="pending-applications.html" class="nav-link-active">待審核列表</a>
+                    <a href="history.html" class="nav-link">歷史紀錄</a>
+                    <a href="../announcement/list.html" class="nav-link">公告</a>
+                </nav>
+
+                <div class="flex items-center gap-3 pl-6 border-l border-gray-200 dark:border-gray-700">
+                    <div class="flex flex-col items-end">
+                        <span id="user-name-header" class="text-sm font-semibold">載入中...</span>
+                        <span id="user-role-header" class="text-xs text-slate-500">審核人員</span>
+                    </div>
+                    <div id="user-avatar"
+                        class="h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-400">
+                        <span class="material-symbols-outlined">person</span>
+                    </div>
+                    <button id="logout-btn-header" class="text-slate-400 hover:text-red-500">
+                        <span class="material-symbols-outlined">logout</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-1 w-full max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div class="flex flex-col gap-8">
+            <!-- Back Button -->
+            <div>
+                <a href="pending-applications.html"
+                    class="inline-flex items-center gap-2 text-slate-500 hover:text-primary transition-colors font-semibold">
+                    <span class="material-symbols-outlined">arrow_back</span>
+                    <span>返回待審核列表</span>
+                </a>
+            </div>
+
+            <!-- Page Title -->
+            <div class="flex flex-col gap-2">
+                <h1 class="text-[#0f172a] dark:text-white text-3xl font-black tracking-tight">申請詳情</h1>
+                <p class="text-slate-500 text-sm font-medium">審核學生的獎學金申請資料</p>
+            </div>
+
+            <!-- Loading Indicator -->
+            <div id="loading-indicator" class="flex justify-center py-20">
+                <span class="material-symbols-outlined animate-spin text-primary text-5xl">progress_activity</span>
+            </div>
+
+            <!-- Content (Hidden initially) -->
+            <div id="content" class="hidden flex flex-col gap-6">
+                <!-- Student Info Card -->
+                <div class="info-card">
+                    <h2 class="text-lg font-bold mb-4 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary">person</span>
+                        學生資訊
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <p class="info-label">姓名</p>
+                            <p id="student-name" class="info-value">--</p>
+                        </div>
+                        <div>
+                            <p class="info-label">帳號</p>
+                            <p id="student-account" class="info-value">--</p>
+                        </div>
+                        <div>
+                            <p class="info-label">系所</p>
+                            <p id="student-department" class="info-value">--</p>
+                        </div>
+                        <div>
+                            <p class="info-label">年級</p>
+                            <p id="student-grade" class="info-value">--</p>
+                        </div>
+                        <div>
+                            <p class="info-label">Email</p>
+                            <p id="student-email" class="info-value">--</p>
+                        </div>
+                        <div>
+                            <p class="info-label">電話</p>
+                            <p id="student-phone" class="info-value">--</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scholarship Info Card -->
+                <div class="info-card">
+                    <h2 class="text-lg font-bold mb-4 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary">school</span>
+                        獎學金資訊
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="md:col-span-2">
+                            <p class="info-label">名稱</p>
+                            <p id="scholarship-name" class="info-value text-lg">--</p>
+                        </div>
+                        <div>
+                            <p class="info-label">金額</p>
+                            <p id="scholarship-amount" class="info-value text-lg text-primary">--</p>
+                        </div>
+                        <div>
+                            <p class="info-label">類型</p>
+                            <p id="scholarship-type" class="info-value">--</p>
+                        </div>
+                        <div class="md:col-span-2">
+                            <p class="info-label">說明</p>
+                            <p id="scholarship-description" class="info-value">--</p>
+                        </div>
+                        <div class="md:col-span-2">
+                            <p class="info-label">申請條件</p>
+                            <p id="scholarship-conditions" class="info-value">--</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recommendations Card -->
+                <div class="info-card">
+                    <h2 class="text-lg font-bold mb-4 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary">history_edu</span>
+                        推薦信
+                    </h2>
+                    <div id="recommendations-list" class="space-y-3">
+                        <!-- Recommendations will be rendered here -->
+                    </div>
+                </div>
+
+                <!-- Review Form -->
+                <div class="info-card">
+                    <h2 class="text-lg font-bold mb-4 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary">rate_review</span>
+                        審核結果
+                    </h2>
+                    <div class="flex flex-col gap-4">
+                        <p class="text-sm text-slate-500">請選擇審核結果：</p>
+                        <div class="flex gap-4">
+                            <label class="flex items-center gap-3 cursor-pointer">
+                                <input type="radio" name="review-result" value="APPROVED"
+                                    class="w-5 h-5 text-primary focus:ring-primary" />
+                                <span class="font-semibold text-emerald-600">通過</span>
+                            </label>
+                            <label class="flex items-center gap-3 cursor-pointer">
+                                <input type="radio" name="review-result" value="REJECTED"
+                                    class="w-5 h-5 text-primary focus:ring-primary" />
+                                <span class="font-semibold text-rose-600">拒絕</span>
+                            </label>
+                        </div>
+                        <div class="flex gap-3 pt-4">
+                            <button id="submit-review-btn"
+                                class="flex-1 flex items-center justify-center gap-2 rounded-xl h-12 bg-primary text-white text-sm font-bold shadow-lg shadow-primary/30 transition-all active:scale-95 hover:-translate-y-0.5 hover:bg-primary-dark">
+                                <span class="material-symbols-outlined">check_circle</span>
+                                <span>提交審核</span>
+                            </button>
+                            <a href="pending-applications.html"
+                                class="px-6 flex items-center justify-center rounded-xl h-12 bg-white border border-gray-200 text-gray-700 text-sm font-bold hover:bg-gray-50 transition-all">
+                                取消
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="w-full bg-white dark:bg-[#1a202c] border-t border-gray-200 dark:border-gray-700 py-8 mt-auto">
+        <div
+            class="px-6 lg:px-40 flex flex-col md:flex-row items-center justify-between gap-6 text-sm text-slate-500 font-medium">
+            <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary !text-[18px]">school</span>
+                <p>© 2026 Scholarship Hub. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+
+    <script src="../../js/config.js"></script>
+    <script>
+        const API_BASE = CONFIG.API_BASE;
+        let applicationId = null;
+
+        // Check Auth
+        function checkAuth() {
+            const token = localStorage.getItem('authToken');
+            const user = localStorage.getItem('user');
+            if (!token || !user) {
+                alert('請先登入');
+                window.location.href = '../auth/login.html';
+                return null;
+            }
+
+            const userData = JSON.parse(user);
+            if (userData.role !== 'REVIEWER') {
+                alert('您沒有權限訪問此頁面');
+                window.location.href = '../../index.html';
+                return null;
+            }
+
+            return token;
+        }
+
+        // Load Header Info
+        function loadHeaderInfo() {
+            const userStr = localStorage.getItem('user');
+            if (userStr) {
+                const user = JSON.parse(userStr);
+                document.getElementById("user-name-header").textContent = user.name || "未知使用者";
+            }
+        }
+
+        // Logout
+        function logout() {
+            localStorage.clear();
+            window.location.href = '../auth/login.html';
+        }
+
+        // Get Application ID from URL
+        function getApplicationIdFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('id');
+        }
+
+        // Load Application Detail
+        async function loadApplicationDetail() {
+            applicationId = getApplicationIdFromURL();
+            if (!applicationId) {
+                alert('找不到申請ID');
+                window.location.href = 'pending-applications.html';
+                return;
+            }
+
+            const token = checkAuth();
+            if (!token) return;
+
+            try {
+                const res = await fetch(`${API_BASE}/reviewer/applications/${applicationId}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (!res.ok) {
+                    throw new Error('Failed to fetch application detail');
+                }
+
+                const detail = await res.json();
+
+                // Hide loading, show content
+                document.getElementById('loading-indicator').classList.add('hidden');
+                document.getElementById('content').classList.remove('hidden');
+
+                // Fill Student Info
+                document.getElementById('student-name').textContent = detail.studentName || '--';
+                document.getElementById('student-account').textContent = detail.studentAccount || '--';
+                document.getElementById('student-department').textContent = detail.studentDepartment || '--';
+                document.getElementById('student-grade').textContent = detail.studentGrade || '--';
+                document.getElementById('student-email').textContent = detail.studentEmail || '--';
+                document.getElementById('student-phone').textContent = detail.studentPhone || '--';
+
+                // Fill Scholarship Info
+                document.getElementById('scholarship-name').textContent = detail.scholarshipName || '--';
+                document.getElementById('scholarship-amount').textContent = detail.scholarshipAmount ? `$${detail.scholarshipAmount.toLocaleString()}` : '--';
+                document.getElementById('scholarship-type').textContent = detail.scholarshipType || '--';
+                document.getElementById('scholarship-description').textContent = detail.scholarshipDescription || '--';
+                document.getElementById('scholarship-conditions').textContent = detail.scholarshipConditions || '--';
+
+                // Fill Recommendations
+                const recList = document.getElementById('recommendations-list');
+                if (detail.recommendations && detail.recommendations.length > 0) {
+                    recList.innerHTML = detail.recommendations.map(rec => {
+                        const statusClass = rec.submitted ? 'bg-emerald-50 text-emerald-600 border-emerald-200' : 'bg-amber-50 text-amber-600 border-amber-200';
+                        const statusText = rec.submitted ? '已提交' : '未提交';
+                        const statusIcon = rec.submitted ? 'check_circle' : 'schedule';
+
+                        return `
+                            <div class="p-4 border rounded-xl ${rec.submitted ? 'border-emerald-200 bg-emerald-50/30' : 'border-amber-200 bg-amber-50/30'}">
+                                <div class="flex items-center justify-between mb-2">
+                                    <div class="flex items-center gap-2">
+                                        <span class="material-symbols-outlined text-primary">person</span>
+                                        <span class="font-bold">${rec.advisorName}</span>
+                                    </div>
+                                    <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold border ${statusClass}">
+                                        <span class="material-symbols-outlined !text-[14px]">${statusIcon}</span>
+                                        ${statusText}
+                                    </span>
+                                </div>
+                                ${rec.submitted && rec.content ? `
+                                    <div class="mt-2 p-3 bg-white rounded-lg text-sm text-slate-600">
+                                        ${rec.content}
+                                    </div>
+                                ` : ''}
+                            </div>
+                        `;
+                    }).join('');
+                } else {
+                    recList.innerHTML = '<p class="text-slate-500 text-sm">此申請沒有推薦信</p>';
+                }
+
+            } catch (error) {
+                console.error(error);
+                alert('載入申請詳情失敗');
+                window.location.href = 'pending-applications.html';
+            }
+        }
+
+        // Submit Review
+        async function submitReview() {
+            const token = checkAuth();
+            if (!token) return;
+
+            const selectedResult = document.querySelector('input[name="review-result"]:checked');
+            if (!selectedResult) {
+                alert('請選擇審核結果');
+                return;
+            }
+
+            const result = selectedResult.value;
+            const confirmMsg = result === 'APPROVED' ? '確定要通過此申請嗎？' : '確定要拒絕此申請嗎？';
+
+            if (!confirm(confirmMsg)) {
+                return;
+            }
+
+            try {
+                const res = await fetch(`${API_BASE}/reviewer/reviews`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        applicationId: parseInt(applicationId),
+                        result: result
+                    })
+                });
+
+                if (res.ok) {
+                    const data = await res.json();
+                    alert('審核成功！');
+                    window.location.href = 'pending-applications.html';
+                } else {
+                    const error = await res.json();
+                    alert('審核失敗：' + (error.error || '未知錯誤'));
+                }
+            } catch (error) {
+                console.error(error);
+                alert('無法連線到伺服器');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadHeaderInfo();
+            loadApplicationDetail();
+
+            // Logout binding
+            document.getElementById('logout-btn-header').addEventListener('click', logout);
+
+            // Submit review button
+            document.getElementById('submit-review-btn').addEventListener('click', submitReview);
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Scholarship Application</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&amp;family=Noto+Sans+TC:wght@100..900&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#4f46e5",
+                        "background-light": "#f8fafc",
+                        "background-dark": "#0f172a",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1e293b",
+                        "border-light": "#e2e8f0",
+                        "border-dark": "#334155",
+                        "text-main-light": "#0f172a",
+                        "text-main-dark": "#f1f5f9",
+                        "text-sub-light": "#64748b",
+                        "text-sub-dark": "#94a3b8",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "Noto Sans TC", "sans-serif"],
+                        "body": ["Noto Sans TC", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-text-main-light dark:text-text-main-dark font-display antialiased selection:bg-primary/20 selection:text-primary">
+    <div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+        <header
+            class="sticky top-0 z-50 flex items-center justify-between whitespace-nowrap border-b border-solid border-border-light dark:border-border-dark bg-surface-light/95 dark:bg-surface-dark/95 backdrop-blur-sm px-4 md:px-10 py-3 shadow-sm">
+            <div class="flex items-center gap-4">
+                <div class="flex items-center justify-center size-10 rounded-lg bg-primary/10 text-primary">
+                    <span class="material-symbols-outlined text-2xl">school</span>
+                </div>
+                <h2
+                    class="text-text-main-light dark:text-text-main-dark text-lg font-bold leading-tight tracking-[-0.015em]">
+                    Scholarship System</h2>
+            </div>
+            <div class="flex flex-1 justify-end gap-8">
+                <div class="hidden md:flex items-center gap-9">
+                    <a class="text-text-sub-light dark:text-text-sub-dark hover:text-primary dark:hover:text-primary transition-colors text-sm font-medium leading-normal"
+                        href="../student/profile.html">儀表板</a>
+                    <a class="text-primary text-sm font-bold leading-normal" href="apply.html">申請表單</a>
+                    <a class="text-text-sub-light dark:text-text-sub-dark hover:text-primary dark:hover:text-primary transition-colors text-sm font-medium leading-normal"
+                        href="../student/profile.html">個人檔案</a>
+                </div>
+                <div class="flex items-center gap-4">
+                    <button
+                        class="hidden sm:flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-9 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-primary/90 transition-colors shadow-md shadow-primary/20">
+                        <span class="truncate">登出</span>
+                    </button>
+                    <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border-2 border-white dark:border-surface-dark shadow-sm ring-1 ring-border-light dark:ring-border-dark"
+                        data-alt="Student profile avatar with a gentle smile"
+                        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA_MeTsX8IJAQVNgwlue9q3I88R6mpanV2tNXWQJn4spaz4aQ-rX8UDRY8aZmq8zUwu9_ta4FPotV5GHygMhZiih1Ucq11v876213bT2Bc-IC0yofAPTdAkiFr3kgDpy3FCWLxwl8aPu2YN0ePHjQe15lBrieRl8ZgQdlbQ5VqRw8JPoO7IjReXpCoxC8hKVKcOEIrk3TRlqmRhK_tdZQcVd_qqOOP8P8wZl5VoTPbhXtHKa7hG4YyCDmoq4hXqW88Ledmwopk6cnA");'>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <main class="flex-1 flex justify-center py-8 px-4 md:px-8">
+            <div class="layout-content-container flex flex-col max-w-[960px] flex-1 w-full gap-6">
+                <div class="flex flex-col gap-2">
+                    <div class="flex items-center gap-2 text-text-sub-light dark:text-text-sub-dark text-sm mb-2">
+                        <a class="hover:underline" href="../../index.html">首頁</a>
+                        <span class="material-symbols-outlined text-xs">chevron_right</span>
+                        <span>申請表單</span>
+                    </div>
+                    <h1
+                        class="text-text-main-light dark:text-text-main-dark text-3xl md:text-4xl font-black leading-tight tracking-[-0.033em]">
+                        112學年度 獎學金申請表</h1>
+                    <p
+                        class="text-text-sub-light dark:text-text-sub-dark text-base font-normal leading-normal max-w-2xl">
+                        請誠實填寫以下資訊，所有欄位皆為必填。您的資料將僅用於獎學金審核流程。若有任何問題，請聯繫教務處。
+                    </p>
+                </div>
+                <div
+                    class="w-full bg-surface-light dark:bg-surface-dark rounded-xl p-6 border border-border-light dark:border-border-dark shadow-sm">
+                    <div class="flex flex-col gap-3">
+                        <div class="flex gap-6 justify-between items-end">
+                            <p class="text-text-main-light dark:text-text-main-dark text-base font-bold leading-normal">
+                                申請進度</p>
+                            <span class="text-primary text-sm font-bold">Step 1 of 4</span>
+                        </div>
+                        <div
+                            class="relative w-full h-2 rounded-full bg-border-light dark:bg-border-dark overflow-hidden">
+                            <div class="absolute left-0 top-0 h-full rounded-full bg-primary transition-all duration-500"
+                                style="width: 25%;"></div>
+                        </div>
+                        <div
+                            class="flex justify-between text-xs text-text-sub-light dark:text-text-sub-dark font-medium mt-1">
+                            <span class="text-primary">基本資料</span>
+                            <span>學業表現</span>
+                            <span>自傳計畫</span>
+                            <span>推薦信</span>
+                        </div>
+                    </div>
+                </div>
+                <form class="flex flex-col gap-6" onsubmit="event.preventDefault();">
+                    <div
+                        class="bg-surface-light dark:bg-surface-dark rounded-xl border border-border-light dark:border-border-dark shadow-sm overflow-hidden">
+                        <div
+                            class="border-b border-border-light dark:border-border-dark px-6 py-4 flex items-center gap-3">
+                            <span class="material-symbols-outlined text-primary">person</span>
+                            <h3 class="text-lg font-bold text-text-main-light dark:text-text-main-dark">基本資料</h3>
+                        </div>
+                        <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <label class="flex flex-col gap-2">
+                                <span class="text-text-main-light dark:text-text-main-dark text-sm font-medium">姓名 <span
+                                        class="text-red-500">*</span></span>
+                                <input
+                                    class="w-full rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-text-main-light dark:text-text-main-dark h-11 px-4 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-text-sub-light/50"
+                                    placeholder="請輸入您的姓名" type="text" value="王小明" />
+                            </label>
+                            <label class="flex flex-col gap-2">
+                                <span class="text-text-main-light dark:text-text-main-dark text-sm font-medium">學號 <span
+                                        class="text-red-500">*</span></span>
+                                <input
+                                    class="w-full rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-text-main-light dark:text-text-main-dark h-11 px-4 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-text-sub-light/50"
+                                    placeholder="請輸入您的學號" type="text" value="B11209001" />
+                            </label>
+                            <label class="flex flex-col gap-2">
+                                <span class="text-text-main-light dark:text-text-main-dark text-sm font-medium">就讀系所
+                                    <span class="text-red-500">*</span></span>
+                                <input
+                                    class="w-full rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-text-main-light dark:text-text-main-dark h-11 px-4 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-text-sub-light/50"
+                                    placeholder="例如：資訊工程系" type="text" />
+                            </label>
+                            <label class="flex flex-col gap-2">
+                                <span class="text-text-main-light dark:text-text-main-dark text-sm font-medium">電子郵件
+                                    <span class="text-red-500">*</span></span>
+                                <input
+                                    class="w-full rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-text-main-light dark:text-text-main-dark h-11 px-4 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-text-sub-light/50"
+                                    placeholder="student@university.edu.tw" type="email" />
+                            </label>
+                            <label class="flex flex-col gap-2 md:col-span-2">
+                                <span class="text-text-main-light dark:text-text-main-dark text-sm font-medium">聯絡電話
+                                    <span class="text-red-500">*</span></span>
+                                <input
+                                    class="w-full rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-text-main-light dark:text-text-main-dark h-11 px-4 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-text-sub-light/50"
+                                    placeholder="0912-345-678" type="tel" />
+                            </label>
+                        </div>
+                    </div>
+                    <div
+                        class="bg-surface-light dark:bg-surface-dark rounded-xl border border-border-light dark:border-border-dark shadow-sm overflow-hidden">
+                        <div
+                            class="border-b border-border-light dark:border-border-dark px-6 py-4 flex items-center gap-3">
+                            <span class="material-symbols-outlined text-primary">school</span>
+                            <h3 class="text-lg font-bold text-text-main-light dark:text-text-main-dark">學業表現</h3>
+                        </div>
+                        <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <label class="flex flex-col gap-2">
+                                <span class="text-text-main-light dark:text-text-main-dark text-sm font-medium">前一學期平均成績
+                                    (GPA) <span class="text-red-500">*</span></span>
+                                <input
+                                    class="w-full rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-text-main-light dark:text-text-main-dark h-11 px-4 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-text-sub-light/50"
+                                    max="4.3" min="0" placeholder="例如：4.0" step="0.01" type="number" />
+                            </label>
+                            <label class="flex flex-col gap-2">
+                                <span class="text-text-main-light dark:text-text-main-dark text-sm font-medium">班級排名
+                                    <span class="text-red-500">*</span></span>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-text-sub-light dark:text-text-sub-dark text-sm">第</span>
+                                    <input
+                                        class="w-24 rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-text-main-light dark:text-text-main-dark h-11 px-4 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-center"
+                                        min="1" placeholder="1" type="number" />
+                                    <span class="text-text-sub-light dark:text-text-sub-dark text-sm">名</span>
+                                </div>
+                            </label>
+                            <div class="md:col-span-2">
+                                <span
+                                    class="text-text-main-light dark:text-text-main-dark text-sm font-medium mb-2 block">上傳成績單
+                                    (PDF/JPG) <span class="text-red-500">*</span></span>
+                                <div
+                                    class="relative group cursor-pointer flex flex-col items-center justify-center w-full h-48 rounded-xl border-2 border-dashed border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark hover:border-primary/50 hover:bg-primary/5 transition-all">
+                                    <input accept=".pdf,.jpg,.jpeg,.png"
+                                        class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" type="file" />
+                                    <div class="flex flex-col items-center gap-3 text-center p-4">
+                                        <div
+                                            class="size-12 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                                            <span class="material-symbols-outlined text-2xl">cloud_upload</span>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm font-bold text-text-main-light dark:text-text-main-dark">
+                                                點擊或拖曳檔案至此處</p>
+                                            <p class="text-xs text-text-sub-light dark:text-text-sub-dark mt-1">
+                                                支援格式：PDF, JPG (最大 5MB)</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        class="bg-surface-light dark:bg-surface-dark rounded-xl border border-border-light dark:border-border-dark shadow-sm overflow-hidden">
+                        <div
+                            class="border-b border-border-light dark:border-border-dark px-6 py-4 flex items-center gap-3">
+                            <span class="material-symbols-outlined text-primary">edit_note</span>
+                            <h3 class="text-lg font-bold text-text-main-light dark:text-text-main-dark">自傳與計畫</h3>
+                        </div>
+                        <div class="p-6">
+                            <label class="flex flex-col gap-2">
+                                <span
+                                    class="text-text-main-light dark:text-text-main-dark text-sm font-medium">請簡述您的學習歷程與未來規劃
+                                    <span class="text-red-500">*</span></span>
+                                <textarea
+                                    class="w-full rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-text-main-light dark:text-text-main-dark p-4 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-text-sub-light/50 resize-y"
+                                    placeholder="請在此輸入您的內容... (至少 300 字)" rows="8"></textarea>
+                                <div class="flex justify-end">
+                                    <span class="text-xs text-text-sub-light dark:text-text-sub-dark">目前字數: 0</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                    <div
+                        class="bg-surface-light dark:bg-surface-dark rounded-xl border border-border-light dark:border-border-dark shadow-sm overflow-hidden">
+                        <div
+                            class="border-b border-border-light dark:border-border-dark px-6 py-4 flex items-center gap-3">
+                            <span class="material-symbols-outlined text-primary">recommend</span>
+                            <h3 class="text-lg font-bold text-text-main-light dark:text-text-main-dark">推薦信</h3>
+                        </div>
+                        <div class="p-6 flex flex-col gap-6">
+                            <div
+                                class="flex gap-3 p-4 rounded-lg bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-100 dark:border-indigo-800/50">
+                                <span class="material-symbols-outlined text-primary shrink-0">info</span>
+                                <div class="flex flex-col gap-1">
+                                    <p class="text-sm font-bold text-indigo-900 dark:text-indigo-100">推薦信相關說明</p>
+                                    <p class="text-sm text-indigo-800 dark:text-indigo-200/80">
+                                        推薦信需由導師或教授直接上傳，系統將發送上傳連結至老師信箱。請確認 Email 正確無誤。</p>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
+                                <label class="flex flex-col gap-2">
+                                    <span
+                                        class="text-text-main-light dark:text-text-main-dark text-sm font-medium">推薦教授姓名</span>
+                                    <input
+                                        class="w-full rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-text-main-light dark:text-text-main-dark h-11 px-4 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-text-sub-light/50"
+                                        placeholder="例如：李大同 教授" type="text" />
+                                </label>
+                                <label class="flex flex-col gap-2">
+                                    <span
+                                        class="text-text-main-light dark:text-text-main-dark text-sm font-medium">教授電子郵件</span>
+                                    <div class="flex gap-2">
+                                        <input
+                                            class="flex-1 rounded-lg border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-text-main-light dark:text-text-main-dark h-11 px-4 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-text-sub-light/50"
+                                            placeholder="professor@university.edu.tw" type="email" />
+                                        <button
+                                            class="shrink-0 h-11 px-4 rounded-lg border border-primary text-primary hover:bg-primary/5 font-medium text-sm transition-colors flex items-center gap-2"
+                                            type="button">
+                                            <span class="material-symbols-outlined text-[18px]">send</span>
+                                            發送邀請
+                                        </button>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        class="sticky bottom-0 z-40 mt-4 md:static p-4 md:p-0 bg-surface-light/95 md:bg-transparent border-t md:border-t-0 border-border-light md:border-none backdrop-blur-md md:backdrop-blur-none flex flex-col-reverse md:flex-row justify-end gap-4">
+                        <button
+                            class="h-12 md:h-11 px-6 rounded-lg border border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark text-text-main-light dark:text-text-main-dark font-bold hover:bg-background-light dark:hover:bg-background-dark transition-colors shadow-sm"
+                            type="button">
+                            暫存草稿
+                        </button>
+                        <button
+                            class="h-12 md:h-11 px-8 rounded-lg bg-primary text-white font-bold hover:bg-primary/90 transition-all shadow-lg shadow-primary/25 flex items-center justify-center gap-2"
+                            type="submit">
+                            <span>下一步：預覽申請</span>
+                            <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </main>
+        <footer
+            class="w-full border-t border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark py-6 text-center">
+            <p class="text-sm text-text-sub-light dark:text-text-sub-dark">
+                © 2026 Scholarship System. All rights reserved.
+            </p>
+        </footer>
+    </div>
+</body>
+
+</html>

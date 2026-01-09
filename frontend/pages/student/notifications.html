@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>通知中心 | ScholarshipHub</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&amp;family=Noto+Sans+TC:wght@300;400;500;700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#4F46E5",
+                        "primary-dark": "#4338ca",
+                        "background-light": "#F8FAFC",
+                        "background-dark": "#101622",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "Noto Sans TC", "sans-serif"],
+                        "body": ["Noto Sans TC", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer components {
+            .nav-link {
+                @apply text-slate-500 hover:text-primary transition-colors font-medium relative py-1;
+            }
+            .nav-link:hover {
+                @apply text-primary;
+            }
+            .nav-link-active {
+                @apply text-primary font-bold relative py-1;
+            }
+            .nav-link-active::after {
+                content: '';
+                @apply absolute bottom-[-21px] left-0 w-full h-[3px] bg-primary rounded-t-full shadow-[0_-2px_6px_rgba(79,70,229,0.3)];
+            }
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-[#0f172a] dark:text-white font-display min-h-screen flex flex-col overflow-x-hidden transition-colors duration-300">
+
+    <!-- Top Navbar -->
+    <header
+        class="sticky top-0 z-50 w-full border-b border-gray-200 bg-white/80 backdrop-blur-md dark:bg-[#1a202c] dark:border-gray-700 shadow-sm">
+        <div class="mx-auto flex h-16 max-w-[1440px] items-center justify-between px-4 sm:px-6 lg:px-8">
+            <a href="#" id="logo-link" class="flex items-center gap-4">
+                <div class="flex items-center justify-center size-9 rounded-xl bg-primary/10 text-primary shadow-sm">
+                    <span class="material-symbols-outlined">school</span>
+                </div>
+                <h1 class="text-xl font-bold">ScholarshipHub</h1>
+            </a>
+
+            <div class="hidden md:flex flex-1 justify-end items-center gap-8">
+                <nav class="flex gap-6">
+                    <a href="../scholarship/list.html" class="nav-link">獎學金列表</a>
+                    <a href="../announcement/list.html" class="nav-link">公告</a>
+                    <a href="applications.html" class="nav-link">我的申請</a>
+                </nav>
+
+                <div class="flex items-center gap-3 pl-6 border-l border-gray-200 dark:border-gray-700">
+                    <!-- Notification Bell -->
+                    <a href="notifications.html"
+                        class="relative p-2 rounded-lg hover:bg-primary/10 text-primary transition-colors">
+                        <span class="material-symbols-outlined">notifications</span>
+                        <span id="nav-badge"
+                            class="hidden absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full size-5 flex items-center justify-center">0</span>
+                    </a>
+                    <div class="flex flex-col items-end">
+                        <span id="user-name-header" class="text-sm font-semibold">載入中...</span>
+                        <span id="user-role-header" class="text-xs text-slate-500">...</span>
+                    </div>
+                    <a href="profile.html" id="user-avatar"
+                        class="h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-400 hover:ring-2 hover:ring-primary/50 transition-all cursor-pointer"
+                        title="個人檔案">
+                        <span class="material-symbols-outlined">person</span>
+                    </a>
+                    <button id="logout-btn-header" class="text-slate-400 hover:text-red-500">
+                        <span class="material-symbols-outlined">logout</span>
+                    </button>
+                </div>
+            </div>
+
+            <button class="md:hidden p-2 text-gray-500">
+                <span class="material-symbols-outlined">menu</span>
+            </button>
+        </div>
+    </header>
+
+    <main class="flex-1 w-full max-w-[900px] mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div class="flex flex-col gap-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-black tracking-tight flex items-center gap-3">
+                        通知中心
+                        <span id="unread-badge"
+                            class="px-3 py-1 bg-primary/10 text-primary text-xs font-bold rounded-full">0 則未讀</span>
+                    </h1>
+                    <p class="text-slate-500 text-sm font-medium mt-1">查看您的獎學金審核通知</p>
+                </div>
+                <button id="mark-all-read-btn"
+                    class="flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-gray-200 text-sm font-bold text-slate-600 hover:bg-slate-50 transition-colors shadow-sm">
+                    <span class="material-symbols-outlined !text-[18px]">done_all</span>
+                    全部標記已讀
+                </button>
+            </div>
+
+            <!-- Notifications List -->
+            <div id="notifications-container"
+                class="bg-white dark:bg-[#1a202c] rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
+                <div id="notifications-loading" class="py-20 text-center text-slate-500">
+                    <span class="material-symbols-outlined animate-spin text-primary text-4xl">progress_activity</span>
+                    <p class="mt-3 font-medium">載入通知中...</p>
+                </div>
+                <div id="notifications-list" class="hidden divide-y divide-gray-100 dark:divide-gray-700">
+                    <!-- Notifications will be rendered here -->
+                </div>
+                <div id="notifications-empty" class="hidden py-20 text-center text-slate-400">
+                    <span class="material-symbols-outlined text-6xl mb-4">notifications_off</span>
+                    <p class="font-medium text-lg">暫無通知</p>
+                    <p class="text-sm mt-1">當您的獎學金申請被審核後，將會收到通知</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="w-full bg-white dark:bg-[#1a202c] border-t border-gray-200 dark:border-gray-700 py-8 mt-auto">
+        <div
+            class="px-6 lg:px-40 flex flex-col md:flex-row items-center justify-between gap-6 text-sm text-slate-500 font-medium">
+            <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary !text-[18px]">school</span>
+                <p>© 2026 Scholarship Hub. All rights reserved.</p>
+            </div>
+            <div class="flex gap-8">
+                <a class="hover:text-primary transition-colors" href="#">隱私權政策</a>
+                <a class="hover:text-primary transition-colors" href="#">服務條款</a>
+                <a class="hover:text-primary transition-colors" href="#">聯絡我們</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../../js/config.js"></script>
+    <script>
+        const API_BASE = CONFIG.API_BASE;
+
+        // Check Auth
+        function checkAuth() {
+            const token = localStorage.getItem('authToken');
+            if (!token) {
+                alert('請先登入');
+                window.location.href = '../auth/login.html';
+                return null;
+            }
+            return token;
+        }
+
+        // Load Header Info
+        function loadHeaderInfo() {
+            const userStr = localStorage.getItem('user');
+            if (userStr) {
+                const user = JSON.parse(userStr);
+                document.getElementById("user-name-header").textContent = user.name || "未知使用者";
+                const roleMap = { STUDENT: "學生", TEACHER: "導師", ADMIN: "管理員", REVIEWER: "審核員" };
+                document.getElementById("user-role-header").textContent = roleMap[user.role] || user.role;
+            }
+        }
+
+        // Logout
+        function logout() {
+            localStorage.clear();
+            window.location.href = '../auth/login.html';
+        }
+
+        // Load notifications
+        async function loadNotifications() {
+            const token = checkAuth();
+            if (!token) return;
+
+            try {
+                const res = await fetch(`${API_BASE}/notifications`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (!res.ok) throw new Error('Failed to load notifications');
+
+                const notifications = await res.json();
+
+                document.getElementById('notifications-loading').classList.add('hidden');
+
+                if (notifications.length === 0) {
+                    document.getElementById('notifications-empty').classList.remove('hidden');
+                    document.getElementById('unread-badge').textContent = '0 則未讀';
+                    return;
+                }
+
+                const unreadCount = notifications.filter(n => !n.isRead).length;
+                document.getElementById('unread-badge').textContent = `${unreadCount} 則未讀`;
+
+                // Update nav badge
+                if (unreadCount > 0) {
+                    document.getElementById('nav-badge').classList.remove('hidden');
+                    document.getElementById('nav-badge').classList.add('flex');
+                    document.getElementById('nav-badge').textContent = unreadCount > 99 ? '99+' : unreadCount;
+                }
+
+                const listEl = document.getElementById('notifications-list');
+                listEl.classList.remove('hidden');
+                listEl.innerHTML = notifications.map(notification => `
+                    <div class="notification-item p-5 hover:bg-slate-50/80 transition-colors cursor-pointer ${notification.isRead ? 'opacity-60' : ''}"
+                        data-id="${notification.notificationId}"
+                        data-read="${notification.isRead}"
+                        onclick="markAsRead(${notification.notificationId}, ${notification.isRead})">
+                        <div class="flex items-start gap-4">
+                            <div class="size-12 rounded-xl flex items-center justify-center shrink-0 ${notification.title.includes('通過') ? 'bg-emerald-100 text-emerald-600' : 'bg-rose-100 text-rose-600'}">
+                                <span class="material-symbols-outlined">${notification.title.includes('通過') ? 'check_circle' : 'cancel'}</span>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-center gap-2">
+                                    <p class="font-bold text-[#0f172a] ${notification.isRead ? '' : 'text-primary'}">${notification.title}</p>
+                                    ${!notification.isRead ? '<span class="size-2 rounded-full bg-primary shrink-0"></span>' : ''}
+                                </div>
+                                <p class="text-slate-600 text-sm mt-1">${notification.content}</p>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+
+            } catch (error) {
+                console.error(error);
+                document.getElementById('notifications-loading').classList.add('hidden');
+                document.getElementById('notifications-list').classList.remove('hidden');
+                document.getElementById('notifications-list').innerHTML = '<div class="py-10 text-center text-red-500">載入失敗</div>';
+            }
+        }
+
+        // Mark single notification as read
+        async function markAsRead(notificationId, isAlreadyRead) {
+            if (isAlreadyRead) return;
+
+            const token = localStorage.getItem('authToken');
+            try {
+                const res = await fetch(`${API_BASE}/notifications/${notificationId}/read`, {
+                    method: 'PUT',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (res.ok) {
+                    // Update UI
+                    const item = document.querySelector(`[data-id="${notificationId}"]`);
+                    if (item) {
+                        item.classList.add('opacity-60');
+                        item.setAttribute('data-read', 'true');
+                        const dot = item.querySelector('.size-2');
+                        if (dot) dot.remove();
+                    }
+                    updateUnreadCount();
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        // Mark all as read
+        async function markAllAsRead() {
+            const token = localStorage.getItem('authToken');
+            try {
+                const res = await fetch(`${API_BASE}/notifications/read-all`, {
+                    method: 'PUT',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (res.ok) {
+                    loadNotifications(); // Reload
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        // Update unread count display
+        function updateUnreadCount() {
+            const items = document.querySelectorAll('.notification-item');
+            let unreadCount = 0;
+            items.forEach(item => {
+                if (item.getAttribute('data-read') === 'false') {
+                    unreadCount++;
+                }
+            });
+            document.getElementById('unread-badge').textContent = `${unreadCount} 則未讀`;
+
+            if (unreadCount > 0) {
+                document.getElementById('nav-badge').classList.remove('hidden');
+                document.getElementById('nav-badge').classList.add('flex');
+                document.getElementById('nav-badge').textContent = unreadCount > 99 ? '99+' : unreadCount;
+            } else {
+                document.getElementById('nav-badge').classList.add('hidden');
+                document.getElementById('nav-badge').classList.remove('flex');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadHeaderInfo();
+            loadNotifications();
+
+            document.getElementById('logout-btn-header').addEventListener('click', logout);
+            document.getElementById('mark-all-read-btn').addEventListener('click', markAllAsRead);
+
+            // Logo click - navigate to role-specific home
+            document.getElementById('logo-link').addEventListener('click', (e) => {
+                e.preventDefault();
+                const userStr = localStorage.getItem('user');
+                if (userStr) {
+                    const user = JSON.parse(userStr);
+                    const role = user.role?.toUpperCase();
+                    if (role === 'STUDENT') {
+                        window.location.href = 'profile.html';
+                    } else if (role === 'ADMIN') {
+                        window.location.href = '../scholarship/list.html';
+                    } else if (role === 'REVIEWER') {
+                        window.location.href = '../reviewer/dashboard.html';
+                    } else if (role === 'TEACHER' || role === 'ADVISOR') {
+                        window.location.href = '../teacher/manage-recommendations.html';
+                    } else {
+                        window.location.href = '../../index.html';
+                    }
+                } else {
+                    window.location.href = '../../index.html';
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

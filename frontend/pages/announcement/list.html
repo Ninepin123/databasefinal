@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>公告列表 | Scholarship Hub</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&amp;family=Noto+Sans+TC:wght@300;400;500;700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#4F46E5",
+                        "primary-dark": "#4338ca",
+                        "background-light": "#F8FAFC",
+                        "background-dark": "#101622",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "Noto Sans TC", "sans-serif"],
+                        "body": ["Noto Sans TC", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+</head>
+<style type="text/tailwindcss">
+    @layer components {
+        .nav-link {
+            @apply text-slate-500 hover:text-primary transition-colors font-medium relative py-1;
+        }
+        .nav-link:hover {
+            @apply text-primary;
+        }
+        .nav-link-active {
+            @apply text-primary font-bold relative py-1;
+        }
+        .nav-link-active::after {
+            content: '';
+            @apply absolute bottom-[-21px] left-0 w-full h-[3px] bg-primary rounded-t-full shadow-[0_-2px_6px_rgba(79,70,229,0.3)];
+        }
+    }
+</style>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-[#0f172a] dark:text-white font-display min-h-screen flex flex-col overflow-x-hidden transition-colors duration-300">
+
+    <header
+        class="sticky top-0 z-50 w-full border-b border-gray-200 bg-white/80 backdrop-blur-md dark:bg-[#1a202c] dark:border-gray-700 shadow-sm">
+        <div class="mx-auto flex h-16 max-w-[1440px] items-center justify-between px-4 sm:px-6 lg:px-8">
+            <a href="#" id="logo-link" class="flex items-center gap-4">
+                <div class="flex items-center justify-center size-9 rounded-xl bg-primary/10 text-primary shadow-sm">
+                    <span class="material-symbols-outlined">school</span>
+                </div>
+                <h1 class="text-xl font-bold">ScholarshipHub</h1>
+            </a>
+
+            <div class="hidden md:flex flex-1 justify-end items-center gap-8">
+                <nav id="main-nav" class="flex gap-6">
+                    <!-- Navigation links will be dynamically generated based on user role -->
+                </nav>
+
+                <div class="flex items-center gap-3 pl-6 border-l border-gray-200 dark:border-gray-700">
+                    <!-- Notification Bell (Students Only) -->
+                    <a href="../student/notifications.html" id="notification-bell"
+                        class="relative p-2 rounded-lg hover:bg-primary/10 text-slate-500 hover:text-primary transition-colors hidden">
+                        <span class="material-symbols-outlined">notifications</span>
+                        <span id="nav-notification-badge"
+                            class="hidden absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full size-5 items-center justify-center">0</span>
+                    </a>
+                    <div class="flex flex-col items-end">
+                        <span id="user-name" class="text-sm font-semibold">載入中...</span>
+                        <span id="user-role" class="text-xs text-slate-500">...</span>
+                    </div>
+                    <a href="#" id="user-avatar"
+                        class="h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center hover:ring-2 hover:ring-primary/50 transition-all cursor-pointer"
+                        title="個人檔案">
+                        <span class="material-symbols-outlined">person</span>
+                    </a>
+                    <button id="logout-btn" class="text-slate-400 hover:text-red-500">
+                        <span class="material-symbols-outlined">logout</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-1 w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+            <h2 class="text-4xl font-black">系統公告</h2>
+            <div class="w-full md:w-96 relative group">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <span
+                        class="material-symbols-outlined text-gray-400 group-focus-within:text-primary transition-colors">search</span>
+                </div>
+                <input type="text" id="search-input" placeholder="搜尋公告..."
+                    class="w-full rounded-xl border border-gray-200 bg-gray-50 py-3 pl-10 pr-4 text-sm placeholder-gray-400 focus:border-primary focus:bg-white focus:outline-none focus:ring-4 focus:ring-primary/10 transition-all shadow-sm">
+            </div>
+        </div>
+
+        <div id="announcement-container" class="space-y-4">
+            <div class="text-center py-10">
+                <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-primary mx-auto"></div>
+                <p class="text-slate-500 mt-4">載入公告中...</p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="border-t border-gray-200 dark:border-gray-700 py-6 text-center text-sm text-slate-400">
+        &copy; 2026 Scholarship Hub. All rights reserved.
+    </footer>
+
+
+    <script src="../../js/config.js"></script>
+    <script>
+        const API_BASE = CONFIG.API_BASE;
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            const token = localStorage.getItem("authToken");
+            if (!token) return location.href = "../auth/login.html";
+
+            document.getElementById("logout-btn").onclick = () => {
+                localStorage.clear();
+                location.href = "../auth/login.html";
+            };
+
+            // Setup navigation and profile based on user role
+            const userStr = localStorage.getItem('user');
+            if (userStr) {
+                try {
+                    const user = JSON.parse(userStr);
+                    const role = user.role?.toUpperCase();
+
+                    // Display user info
+                    document.getElementById("user-name").textContent = user.name || "未知使用者";
+                    const roleMap = { STUDENT: "學生", TEACHER: "導師", ADMIN: "管理員", REVIEWER: "審核人員", ADVISOR: "導師" };
+                    document.getElementById("user-role").textContent = roleMap[role] || user.role || "一般使用者";
+
+                    const nav = document.getElementById('main-nav');
+                    const userAvatar = document.getElementById('user-avatar');
+
+                    // Build navigation based on role
+                    if (role === 'STUDENT') {
+                        nav.innerHTML = `
+                            <a href="../scholarship/list.html" class="nav-link">獎學金列表</a>
+                            <a href="list.html" class="nav-link-active">公告</a>
+                            <a href="../student/applications.html" class="nav-link">我的申請</a>
+                        `;
+                        userAvatar.href = '../student/profile.html';
+
+                        // Show notification bell for students
+                        const bell = document.getElementById('notification-bell');
+                        if (bell) {
+                            bell.classList.remove('hidden');
+                        }
+                        // Load notification count
+                        try {
+                            const countRes = await fetch(`${API_BASE}/notifications/unread-count`, {
+                                headers: { 'Authorization': `Bearer ${token}` }
+                            });
+                            if (countRes.ok) {
+                                const data = await countRes.json();
+                                const badge = document.getElementById('nav-notification-badge');
+                                if (badge && data.count > 0) {
+                                    badge.textContent = data.count > 99 ? '99+' : data.count;
+                                    badge.classList.remove('hidden');
+                                    badge.classList.add('flex');
+                                }
+                            }
+                        } catch (err) {
+                            console.error('Failed to load notification count:', err);
+                        }
+                    } else if (role === 'REVIEWER') {
+                        nav.innerHTML = `
+                            <a href="../reviewer/pending-applications.html" class="nav-link">待審核列表</a>
+                            <a href="../reviewer/history.html" class="nav-link">歷史紀錄</a>
+                            <a href="list.html" class="nav-link-active">公告</a>
+                        `;
+                        userAvatar.href = '../reviewer/pending-applications.html';
+                    } else if (role === 'TEACHER' || role === 'ADVISOR') {
+                        nav.innerHTML = `
+                            <a href="../teacher/manage-recommendations.html" class="nav-link">推薦管理</a>
+                            <a href="../teacher/students.html" class="nav-link">學生列表</a>
+                            <a href="list.html" class="nav-link-active">公告</a>
+                        `;
+                        userAvatar.href = '../teacher/profile.html';
+                    } else if (role === 'ADMIN') {
+                        nav.innerHTML = `
+                            <a href="../scholarship/list.html" class="nav-link">獎學金列表</a>
+                            <a href="list.html" class="nav-link-active">公告</a>
+                            <a href="manage.html" class="nav-link"><span class="flex items-center gap-1 text-primary"><span class="material-symbols-outlined text-[18px]">settings</span>管理公告</span></a>
+                        `;
+                        userAvatar.href = '../scholarship/list.html';
+                    } else {
+                        // Default navigation
+                        nav.innerHTML = `
+                            <a href="../scholarship/list.html" class="nav-link">獎學金列表</a>
+                            <a href="list.html" class="nav-link-active">公告</a>
+                        `;
+                        userAvatar.href = '../../index.html';
+                    }
+                } catch (e) {
+                    console.error('Error parsing user data', e);
+                }
+            }
+
+            // Logo click - navigate to role-specific home
+            document.getElementById('logo-link').addEventListener('click', (e) => {
+                e.preventDefault();
+                const userStr2 = localStorage.getItem('user');
+                if (userStr2) {
+                    const user = JSON.parse(userStr2);
+                    const role = user.role?.toUpperCase();
+                    if (role === 'STUDENT') {
+                        window.location.href = '../student/profile.html';
+                    } else if (role === 'ADMIN') {
+                        window.location.href = '../scholarship/list.html';
+                    } else if (role === 'REVIEWER') {
+                        window.location.href = '../reviewer/dashboard.html';
+                    } else if (role === 'TEACHER' || role === 'ADVISOR') {
+                        window.location.href = '../teacher/manage-recommendations.html';
+                    } else {
+                        window.location.href = '../../index.html';
+                    }
+                } else {
+                    window.location.href = '../../index.html';
+                }
+            });
+
+            // Load announcements
+            loadAnnouncements();
+
+            // Search functionality
+            const searchInput = document.getElementById('search-input');
+            let debounceTimer;
+            searchInput.addEventListener('input', (e) => {
+                clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(() => {
+                    loadAnnouncements(e.target.value);
+                }, 300);
+            });
+        });
+
+        async function loadAnnouncements(keyword = '') {
+            const container = document.getElementById('announcement-container');
+
+            try {
+                let url = `${API_BASE}/announcements`;
+                if (keyword) {
+                    url += `?keyword=${encodeURIComponent(keyword)}`;
+                }
+
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const announcements = await response.json();
+
+                container.innerHTML = '';
+
+                if (announcements.length === 0) {
+                    container.innerHTML = `
+                        <div class="text-center py-16">
+                            <span class="material-symbols-outlined text-6xl text-gray-300">campaign</span>
+                            <p class="text-slate-500 text-lg mt-4">目前沒有公告</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                announcements.forEach(announcement => {
+                    const card = createAnnouncementCard(announcement);
+                    container.appendChild(card);
+                });
+            } catch (error) {
+                console.error('Error fetching announcements:', error);
+                container.innerHTML = '<p class="text-red-500 text-center py-10">無法載入公告，請稍後再試。</p>';
+            }
+        }
+
+        function createAnnouncementCard(announcement) {
+            const article = document.createElement('article');
+            article.className = 'bg-white dark:bg-[#1a202c] rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden hover:shadow-lg transition-all duration-300';
+
+            const createdAt = new Date(announcement.createdAt);
+            const timeAgo = getTimeAgo(createdAt);
+
+            const adminName = announcement.admin ? announcement.admin.name : '系統管理員';
+
+            article.innerHTML = `
+                <div class="p-6">
+                    <div class="flex items-start justify-between gap-4 mb-4">
+                        <div class="flex items-center gap-3">
+                            <div class="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+                                <span class="material-symbols-outlined text-primary">campaign</span>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-[#0f172a] dark:text-white">${announcement.title}</h3>
+                                <p class="text-xs text-slate-400 mt-0.5">由 ${adminName} 發布於 ${timeAgo}</p>
+                            </div>
+                        </div>
+                        <span class="text-xs text-slate-400 whitespace-nowrap">${createdAt.toLocaleDateString()}</span>
+                    </div>
+                    <div class="prose prose-sm max-w-none text-slate-600 dark:text-slate-300">
+                        ${formatContent(announcement.content)}
+                    </div>
+                </div>
+            `;
+
+            return article;
+        }
+
+        function formatContent(content) {
+            if (!content) return '<p class="text-slate-400">無內容</p>';
+            return content.split('\n').map(p => p.trim() ? `<p>${p}</p>` : '').join('');
+        }
+
+        function getTimeAgo(date) {
+            const now = new Date();
+            const diffMs = now - date;
+            const diffMins = Math.floor(diffMs / 60000);
+            const diffHours = Math.floor(diffMs / 3600000);
+            const diffDays = Math.floor(diffMs / 86400000);
+
+            if (diffMins < 1) return '剛剛';
+            if (diffMins < 60) return `${diffMins} 分鐘前`;
+            if (diffHours < 24) return `${diffHours} 小時前`;
+            if (diffDays < 7) return `${diffDays} 天前`;
+            return date.toLocaleDateString();
+        }
+    </script>
+</body>
+
+</html>

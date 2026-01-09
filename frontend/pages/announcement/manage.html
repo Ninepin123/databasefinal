@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>管理公告 | Scholarship Hub</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&amp;family=Noto+Sans+TC:wght@300;400;500;700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#4F46E5",
+                        "primary-dark": "#4338ca",
+                        "background-light": "#F8FAFC",
+                        "background-dark": "#101622",
+                    },
+                    fontFamily: {
+                        "display": ["Lexend", "Noto Sans TC", "sans-serif"],
+                        "body": ["Noto Sans TC", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+</head>
+<style type="text/tailwindcss">
+    @layer components {
+        .nav-link {
+            @apply text-slate-500 hover:text-primary transition-colors font-medium relative py-1;
+        }
+        .nav-link:hover {
+            @apply text-primary;
+        }
+        .nav-link-active {
+            @apply text-primary font-bold relative py-1;
+        }
+        .nav-link-active::after {
+            content: '';
+            @apply absolute bottom-[-21px] left-0 w-full h-[3px] bg-primary rounded-t-full shadow-[0_-2px_6px_rgba(79,70,229,0.3)];
+        }
+    }
+</style>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-[#0f172a] dark:text-white font-display min-h-screen flex flex-col overflow-x-hidden transition-colors duration-300">
+
+    <header
+        class="sticky top-0 z-50 w-full border-b border-gray-200 bg-white/80 backdrop-blur-md dark:bg-[#1a202c] dark:border-gray-700 shadow-sm">
+        <div class="mx-auto flex h-16 max-w-[1440px] items-center justify-between px-4 sm:px-6 lg:px-8">
+            <a href="../scholarship/list.html" class="flex items-center gap-4">
+                <div class="flex items-center justify-center size-9 rounded-xl bg-primary/10 text-primary shadow-sm">
+                    <span class="material-symbols-outlined">school</span>
+                </div>
+                <h1 class="text-xl font-bold">ScholarshipHub</h1>
+            </a>
+
+            <div class="hidden md:flex flex-1 justify-end items-center gap-8">
+                <nav class="flex gap-6">
+                    <a href="../scholarship/list.html"
+                        class="text-sm font-medium text-slate-500 hover:text-primary transition-colors">獎學金管理</a>
+                    <a href="manage.html"
+                        class="text-sm font-medium text-[#0f172a] dark:text-white hover:text-primary transition-colors">公告管理</a>
+                    <a href="../sponsor-unit/list.html"
+                        class="text-sm font-medium text-slate-500 hover:text-primary transition-colors">獎助單位</a>
+                </nav>
+
+                <div class="flex items-center gap-3 pl-6 border-l border-gray-200 dark:border-gray-700">
+                    <div class="flex flex-col items-end">
+                        <span id="user-name" class="text-sm font-semibold">載入中...</span>
+                        <span id="user-role" class="text-xs text-slate-500">管理員</span>
+                    </div>
+                    <div id="user-avatar" class="h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center">
+                        <span class="material-symbols-outlined">person</span>
+                    </div>
+                    <button id="logout-btn" class="text-slate-400 hover:text-red-500">
+                        <span class="material-symbols-outlined">logout</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-1 w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+            <h2 class="text-4xl font-black">管理公告</h2>
+            <button onclick="openCreateModal()"
+                class="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white font-bold rounded-xl hover:bg-primary-dark transition-colors shadow-lg shadow-primary/25">
+                <span class="material-symbols-outlined text-[20px]">add</span>
+                <span>發布新公告</span>
+            </button>
+        </div>
+
+        <div id="announcement-container" class="space-y-4">
+            <div class="text-center py-10">
+                <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-primary mx-auto"></div>
+                <p class="text-slate-500 mt-4">載入公告中...</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Create/Edit Modal -->
+    <div id="announcement-modal"
+        class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center">
+        <div
+            class="bg-white dark:bg-[#1a202c] rounded-2xl shadow-2xl w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="p-6 border-b border-gray-100 dark:border-gray-700">
+                <div class="flex items-center justify-between">
+                    <h3 id="modal-title" class="text-2xl font-bold">發布新公告</h3>
+                    <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </div>
+            </div>
+            <form id="announcement-form" class="p-6 space-y-6">
+                <input type="hidden" id="announcement-id" />
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">公告標題</label>
+                    <input type="text" id="announcement-title" required
+                        class="w-full rounded-xl border border-gray-200 bg-gray-50 py-3 px-4 text-sm placeholder-gray-400 focus:border-primary focus:bg-white focus:outline-none focus:ring-4 focus:ring-primary/10 transition-all"
+                        placeholder="請輸入公告標題" />
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-2">公告內容</label>
+                    <textarea id="announcement-content" rows="8" required
+                        class="w-full rounded-xl border border-gray-200 bg-gray-50 py-3 px-4 text-sm placeholder-gray-400 focus:border-primary focus:bg-white focus:outline-none focus:ring-4 focus:ring-primary/10 transition-all resize-none"
+                        placeholder="請輸入公告內容..."></textarea>
+                </div>
+                <div class="flex items-center gap-3">
+                    <input type="checkbox" id="announcement-active" checked
+                        class="h-5 w-5 rounded border-gray-300 text-primary focus:ring-primary" />
+                    <label for="announcement-active" class="text-sm font-medium text-slate-700 dark:text-slate-300">
+                        立即發布（取消勾選則存為草稿）
+                    </label>
+                </div>
+                <div class="flex gap-3 pt-4">
+                    <button type="button" onclick="closeModal()"
+                        class="flex-1 py-3 px-4 border border-gray-200 rounded-xl font-bold text-slate-600 hover:bg-gray-50 transition-colors">
+                        取消
+                    </button>
+                    <button type="submit"
+                        class="flex-1 py-3 px-4 bg-primary text-white rounded-xl font-bold hover:bg-primary-dark transition-colors shadow-lg shadow-primary/25">
+                        <span id="submit-btn-text">發布公告</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer class="border-t border-gray-200 dark:border-gray-700 py-6 text-center text-sm text-slate-400">
+        &copy; 2026 Scholarship Hub. All rights reserved.
+    </footer>
+
+
+    <script src="../../js/config.js"></script>
+    <script>
+        const API_BASE = CONFIG.API_BASE;
+        let isEditing = false;
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            const token = localStorage.getItem("authToken");
+            if (!token) return location.href = "../auth/login.html";
+
+            // Check if user is admin
+            const userStr = localStorage.getItem('user');
+            if (userStr) {
+                try {
+                    const user = JSON.parse(userStr);
+                    if (!user.role || user.role.toUpperCase() !== 'ADMIN') {
+                        alert('只有管理員可以訪問此頁面');
+                        location.href = 'list.html';
+                        return;
+                    }
+                } catch (e) {
+                    location.href = "../auth/login.html";
+                    return;
+                }
+            } else {
+                location.href = "../auth/login.html";
+                return;
+            }
+
+            document.getElementById("logout-btn").onclick = () => {
+                localStorage.clear();
+                location.href = "../auth/login.html";
+            };
+
+            // Load user profile
+            try {
+                const profileRes = await fetch(`${API_BASE}/profile`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+
+                if (profileRes.ok) {
+                    const profile = await profileRes.json();
+                    document.getElementById("user-name").textContent = profile.name || "未知使用者";
+                    document.getElementById("user-role").textContent = "管理員";
+                }
+            } catch (e) {
+                console.error("Failed to load profile:", e);
+            }
+
+            // Load announcements
+            loadAnnouncements();
+
+            // Form submit handler
+            document.getElementById('announcement-form').addEventListener('submit', handleFormSubmit);
+        });
+
+        async function loadAnnouncements() {
+            const container = document.getElementById('announcement-container');
+            const token = localStorage.getItem("authToken");
+
+            try {
+                const response = await fetch(`${API_BASE}/announcements?all=true`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                if (!response.ok) throw new Error('Network response was not ok');
+
+                const announcements = await response.json();
+                container.innerHTML = '';
+
+                if (announcements.length === 0) {
+                    container.innerHTML = `
+                        <div class="text-center py-16">
+                            <span class="material-symbols-outlined text-6xl text-gray-300">campaign</span>
+                            <p class="text-slate-500 text-lg mt-4">目前沒有公告</p>
+                            <p class="text-slate-400 text-sm mt-2">點擊上方按鈕發布第一則公告</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                announcements.forEach(announcement => {
+                    const card = createManageCard(announcement);
+                    container.appendChild(card);
+                });
+            } catch (error) {
+                console.error('Error fetching announcements:', error);
+                container.innerHTML = '<p class="text-red-500 text-center py-10">無法載入公告，請稍後再試。</p>';
+            }
+        }
+
+        function createManageCard(announcement) {
+            const article = document.createElement('article');
+            article.className = 'bg-white dark:bg-[#1a202c] rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden';
+
+            const createdAt = new Date(announcement.createdAt);
+            const updatedAt = announcement.updatedAt ? new Date(announcement.updatedAt) : null;
+            const isActive = announcement.isActive;
+
+            const statusBadge = isActive
+                ? '<span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold bg-green-50 text-green-600 ring-1 ring-inset ring-green-600/10">已發布</span>'
+                : '<span class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-bold bg-gray-100 text-gray-500 ring-1 ring-inset ring-gray-500/10">草稿</span>';
+
+            article.innerHTML = `
+                <div class="p-6">
+                    <div class="flex items-start justify-between gap-4 mb-4">
+                        <div class="flex-1">
+                            <div class="flex items-center gap-3 mb-2">
+                                ${statusBadge}
+                                <span class="text-xs text-slate-400">${createdAt.toLocaleString()}</span>
+                            </div>
+                            <h3 class="text-xl font-bold text-[#0f172a] dark:text-white">${announcement.title}</h3>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button onclick="openEditModal(${announcement.announcementId})"
+                                class="p-2 rounded-lg hover:bg-blue-50 text-blue-600 transition-colors" title="編輯">
+                                <span class="material-symbols-outlined text-[20px]">edit</span>
+                            </button>
+                            <button onclick="toggleActive(${announcement.announcementId}, ${isActive})"
+                                class="p-2 rounded-lg hover:bg-amber-50 text-amber-600 transition-colors"
+                                title="${isActive ? '設為草稿' : '發布'}">
+                                <span class="material-symbols-outlined text-[20px]">${isActive ? 'visibility_off' : 'visibility'}</span>
+                            </button>
+                            <button onclick="deleteAnnouncement(${announcement.announcementId}, '${announcement.title.replace(/'/g, "\\'")}')"
+                                class="p-2 rounded-lg hover:bg-red-50 text-red-600 transition-colors" title="刪除">
+                                <span class="material-symbols-outlined text-[20px]">delete</span>
+                            </button>
+                        </div>
+                    </div>
+                    <p class="text-slate-500 text-sm line-clamp-3">${announcement.content || '無內容'}</p>
+                    ${updatedAt ? `<p class="text-xs text-slate-400 mt-4">最後更新: ${updatedAt.toLocaleString()}</p>` : ''}
+                </div>
+            `;
+
+            return article;
+        }
+
+        function openCreateModal() {
+            isEditing = false;
+            document.getElementById('modal-title').textContent = '發布新公告';
+            document.getElementById('submit-btn-text').textContent = '發布公告';
+            document.getElementById('announcement-id').value = '';
+            document.getElementById('announcement-title').value = '';
+            document.getElementById('announcement-content').value = '';
+            document.getElementById('announcement-active').checked = true;
+            showModal();
+        }
+
+        async function openEditModal(id) {
+            isEditing = true;
+            const token = localStorage.getItem("authToken");
+
+            try {
+                const response = await fetch(`${API_BASE}/announcements/${id}`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                if (!response.ok) throw new Error('Failed to fetch announcement');
+
+                const announcement = await response.json();
+
+                document.getElementById('modal-title').textContent = '編輯公告';
+                document.getElementById('submit-btn-text').textContent = '儲存變更';
+                document.getElementById('announcement-id').value = announcement.announcementId;
+                document.getElementById('announcement-title').value = announcement.title;
+                document.getElementById('announcement-content').value = announcement.content || '';
+                document.getElementById('announcement-active').checked = announcement.isActive;
+
+                showModal();
+            } catch (error) {
+                console.error('Error:', error);
+                alert('無法載入公告資料');
+            }
+        }
+
+        function showModal() {
+            const modal = document.getElementById('announcement-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('announcement-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        async function handleFormSubmit(e) {
+            e.preventDefault();
+
+            const token = localStorage.getItem("authToken");
+            const id = document.getElementById('announcement-id').value;
+            const title = document.getElementById('announcement-title').value.trim();
+            const content = document.getElementById('announcement-content').value.trim();
+            const isActive = document.getElementById('announcement-active').checked;
+
+            if (!title) {
+                alert('請輸入公告標題');
+                return;
+            }
+
+            const data = { title, content, isActive };
+
+            try {
+                let response;
+                if (isEditing && id) {
+                    response = await fetch(`${API_BASE}/announcements/${id}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify(data)
+                    });
+                } else {
+                    response = await fetch(`${API_BASE}/announcements`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify(data)
+                    });
+                }
+
+                if (response.ok) {
+                    alert(isEditing ? '公告已更新！' : '公告已發布！');
+                    closeModal();
+                    loadAnnouncements();
+                } else {
+                    const errorText = await response.text();
+                    alert('操作失敗: ' + errorText);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('發生錯誤，請稍後再試');
+            }
+        }
+
+        async function toggleActive(id, currentStatus) {
+            const token = localStorage.getItem("authToken");
+            const action = currentStatus ? '設為草稿' : '發布';
+
+            if (!confirm(`確定要${action}此公告嗎？`)) return;
+
+            try {
+                const response = await fetch(`${API_BASE}/announcements/${id}/toggle`, {
+                    method: 'PATCH',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (response.ok) {
+                    loadAnnouncements();
+                } else {
+                    alert('操作失敗');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('發生錯誤，請稍後再試');
+            }
+        }
+
+        async function deleteAnnouncement(id, title) {
+            if (!confirm(`確定要刪除公告「${title}」嗎？\n\n此操作無法復原。`)) return;
+
+            const token = localStorage.getItem("authToken");
+
+            try {
+                const response = await fetch(`${API_BASE}/announcements/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (response.ok) {
+                    alert('公告已刪除！');
+                    loadAnnouncements();
+                } else {
+                    alert('刪除失敗');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('發生錯誤，請稍後再試');
+            }
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('announcement-modal').addEventListener('click', function (e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+
+</html>

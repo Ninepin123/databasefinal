@@ -1,0 +1,112 @@
+/* ScholarshipHub - Shared Styles
+   Extracted from Stitch-generated Tailwind config
+   ============================================== */
+
+:root {
+  /* Primary Colors */
+  --color-primary: #6366f1;
+  --color-primary-dark: #4f46e5;
+  
+  /* Background Colors */
+  --color-bg-light: #f3f4f6;
+  --color-bg-dark: #111827;
+  --color-surface-light: #ffffff;
+  --color-surface-dark: #1f2937;
+  
+  /* Text Colors */
+  --color-text-main-light: #111827;
+  --color-text-main-dark: #f9fafb;
+  --color-text-secondary-light: #6b7280;
+  --color-text-secondary-dark: #9ca3af;
+  
+  /* Border Colors */
+  --color-border-light: #e5e7eb;
+  --color-border-dark: #374151;
+  
+  /* Accent Colors */
+  --color-accent: #ec4899;
+  --color-accent-light: #fbcfe8;
+  
+  /* Gradients */
+  --gradient-vibrant: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
+  --gradient-primary: linear-gradient(to right, #6366f1, #4f46e5);
+  
+  /* Border Radius */
+  --radius-default: 0.25rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+  --radius-2xl: 1rem;
+  --radius-full: 9999px;
+}
+
+/* Base Styles */
+body {
+  font-family: 'Lexend', 'Noto Sans TC', sans-serif;
+  background-color: var(--color-bg-light);
+  color: var(--color-text-main-light);
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.dark body {
+  background-color: var(--color-bg-dark);
+  color: var(--color-text-main-dark);
+}
+
+/* Material Symbols */
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* Custom Utilities */
+.bg-vibrant-gradient {
+  background: var(--gradient-vibrant);
+}
+
+.bg-primary-gradient {
+  background: var(--gradient-primary);
+}
+
+/* Card Styles */
+.card {
+  background-color: var(--color-surface-light);
+  border-radius: var(--radius-2xl);
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+}
+
+.dark .card {
+  background-color: var(--color-surface-dark);
+}
+
+/* Button Styles */
+.btn-primary {
+  background: var(--gradient-primary);
+  color: white;
+  font-weight: 700;
+  padding: 0.875rem 1.25rem;
+  border-radius: var(--radius-xl);
+  box-shadow: 0 10px 15px -3px rgb(99 102 241 / 0.3);
+  transition: all 0.3s;
+}
+
+.btn-primary:hover {
+  box-shadow: 0 20px 25px -5px rgb(99 102 241 / 0.4);
+  transform: translateY(-2px);
+}
+
+/* Input Styles */
+.input-field {
+  width: 100%;
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--color-border-light);
+  background-color: #f9fafb;
+  padding: 0.875rem 1rem;
+  font-size: 0.875rem;
+  transition: all 0.2s;
+}
+
+.input-field:focus {
+  border-color: var(--color-primary);
+  background-color: white;
+  outline: none;
+  box-shadow: 0 0 0 3px rgb(99 102 241 / 0.2);
+}
